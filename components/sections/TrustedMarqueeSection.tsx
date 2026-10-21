@@ -21,14 +21,15 @@ export const TrustedMarqueeSection: React.FC<TrustedMarqueeSectionProps> = ({ cl
       id="trusted-brands"
       aria-label="Trusted by Leading Brands"
       className={cn(
-        'section trusted relative bg-[#0a0f0f] border-y border-white/10 py-12 sm:py-16 overflow-hidden select-none',
+        'section trusted relative bg-[#080d0d] border-t border-white/5 py-12 sm:py-16 overflow-hidden select-none',
         className
       )}
     >
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 mb-8 text-center">
-        <h3 className="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-[#6f7781]">
-          Trusted by Leading Engineering Teams &amp; Visionary Brands
-        </h3>
+      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 mb-8 text-center flex justify-center">
+        <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium tracking-tight text-[#899698]">
+          <span className="w-2 h-2 rounded-xs bg-[var(--primary-color)] shadow-[0_0_8px_rgba(188,234,62,0.6)]" />
+          <span>Trusted by Leading Brands</span>
+        </div>
       </div>
 
       {/* Marquee Track Container with Edge Gradient Masks */}
@@ -36,13 +37,13 @@ export const TrustedMarqueeSection: React.FC<TrustedMarqueeSectionProps> = ({ cl
         {/* Left Edge Gradient Fade */}
         <div
           aria-hidden="true"
-          className="absolute left-0 top-0 bottom-0 w-24 sm:w-40 z-10 pointer-events-none bg-gradient-to-r from-[#0a0f0f] via-[#0a0f0f]/80 to-transparent"
+          className="absolute left-0 top-0 bottom-0 w-24 sm:w-40 z-10 pointer-events-none bg-gradient-to-r from-[#080d0d] via-[#080d0d]/80 to-transparent"
         />
 
         {/* Right Edge Gradient Fade */}
         <div
           aria-hidden="true"
-          className="absolute right-0 top-0 bottom-0 w-24 sm:w-40 z-10 pointer-events-none bg-gradient-to-l from-[#0a0f0f] via-[#0a0f0f]/80 to-transparent"
+          className="absolute right-0 top-0 bottom-0 w-24 sm:w-40 z-10 pointer-events-none bg-gradient-to-l from-[#080d0d] via-[#080d0d]/80 to-transparent"
         />
 
         {/* Hardware-Accelerated Marquee Track */}

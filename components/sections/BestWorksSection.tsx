@@ -47,12 +47,17 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
           },
         });
 
-        tl.from(headerRef.current, {
-          y: 40,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-        });
+        tl.fromTo(
+          headerRef.current,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+          }
+        );
 
         if (headlineBoxRef.current) {
           tl.fromTo(
@@ -69,19 +74,27 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
               scaleX: 1,
               duration: 1.0,
               ease: 'power3.out',
+              clearProps: 'transform,opacity',
             },
             '-=0.45'
           );
         }
 
         if (accentSquareRef.current) {
-          tl.from(
+          tl.fromTo(
             accentSquareRef.current,
             {
               scale: 0,
               rotation: -45,
+              opacity: 0,
+            },
+            {
+              scale: 1,
+              rotation: 0,
+              opacity: 1,
               duration: 0.6,
               ease: 'back.out(2)',
+              clearProps: 'transform,opacity',
             },
             '-=0.4'
           );
@@ -104,12 +117,17 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
             },
           });
 
-          cardTl.from(card, {
-            y: 50,
-            opacity: 0,
-            duration: 0.85,
-            ease: 'power3.out',
-          });
+          cardTl.fromTo(
+            card,
+            { y: 50, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.85,
+              ease: 'power3.out',
+              clearProps: 'transform,opacity',
+            }
+          );
 
           if (curtain) {
             cardTl.fromTo(
@@ -121,6 +139,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                 clipPath: 'inset(0% 0% 0% 0%)',
                 duration: 1.0,
                 ease: 'power3.inOut',
+                clearProps: 'clipPath',
               },
               '-=0.65'
             );
@@ -136,6 +155,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                 scale: 1.0,
                 duration: 1.2,
                 ease: 'power3.out',
+                clearProps: 'transform',
               },
               '-=1.0'
             );
@@ -145,17 +165,22 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
 
       // 3. Bottom CTA reveal
       if (bottomCtaRef.current) {
-        gsap.from(bottomCtaRef.current, {
-          y: 25,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: bottomCtaRef.current,
-            start: 'top 92%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          bottomCtaRef.current,
+          { y: 25, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: bottomCtaRef.current,
+              start: 'top 92%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
     }, sectionRef);
 
@@ -168,7 +193,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
       id="works"
       aria-label="Our Best Works"
       className={cn(
-        'section work relative bg-[var(--dark-color)] text-white py-24 sm:py-32 lg:py-36 overflow-hidden border-t border-white/5',
+        'section work relative bg-[#f4f4f6] text-[#080d0d] py-20 sm:py-28 lg:py-32 overflow-hidden',
         className
       )}
     >
@@ -176,19 +201,19 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
         {/* Section Header */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
-              <Layers className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/[0.05] border border-black/10 mb-4 text-xs font-semibold uppercase tracking-wider text-[#080d0d] select-none">
+              <Layers className="w-3.5 h-3.5 text-[#080d0d]" />
               <span>Selected Portfolio</span>
             </div>
 
             {/* Segmented Typography Header matching reference with expanding box */}
-            <h2 className="text-[44px] sm:text-[68px] md:text-[96px] lg:text-[120px] font-black tracking-tight leading-[0.94] text-white uppercase flex flex-col">
+            <h2 className="text-[44px] sm:text-[68px] md:text-[96px] lg:text-[120px] font-black tracking-tight leading-[0.94] text-[#080d0d] uppercase flex flex-col">
               <span>OUR BEST</span>
               <span className="inline-flex items-center gap-2 sm:gap-3 flex-wrap">
                 <span>WOR</span>
                 <span
                   ref={headlineBoxRef}
-                  className="inline-flex items-center justify-center w-[54px] sm:w-[80px] md:w-[108px] h-[32px] sm:h-[48px] md:h-[64px] rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/15 to-white/5 border border-white/20 overflow-hidden relative align-middle shadow-inner will-change-[width,transform]"
+                  className="inline-flex items-center justify-center w-[54px] sm:w-[80px] md:w-[108px] h-[32px] sm:h-[48px] md:h-[64px] rounded-xl sm:rounded-2xl bg-gradient-to-br from-black/20 to-black/5 border border-black/15 overflow-hidden relative align-middle shadow-inner will-change-[width,transform]"
                 >
                   <span
                     ref={accentSquareRef}
@@ -200,15 +225,14 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
             </h2>
           </div>
 
-          <p className="text-base sm:text-lg text-[#899698] font-normal leading-relaxed max-w-[480px]">
+          <p className="text-base sm:text-lg text-[#6f7781] font-normal leading-relaxed max-w-[480px]">
             Selected case studies showcasing enterprise SaaS architectures, conversion-engineered digital platforms, and kinetic brand systems.
           </p>
         </div>
 
-        {/* 5 Project Cards Grid (Audited Asymmetric Composition) */}
+        {/* Project Cards Grid */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 sm:gap-8">
           {featuredProjects.map((project, index) => {
-            // First two cards are wide 6-column, 3rd is full width or 7-column, 4th & 5th are 5 & 7 column
             const spanClass =
               index === 0
                 ? 'lg:col-span-7'
@@ -227,7 +251,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
               >
                 <Link
                   href={`/work/${project.slug}`}
-                  className="block h-full rounded-3xl bg-[#111616] border border-white/10 hover:border-[var(--primary-color)]/40 transition-all duration-500 overflow-hidden shadow-2xl flex flex-col justify-between"
+                  className="block h-full rounded-3xl bg-white border border-black/10 hover:border-black/20 transition-all duration-500 overflow-hidden shadow-md hover:shadow-xl flex flex-col justify-between"
                 >
                   {/* Card Visual Canvas with Curtain Reveal Mask */}
                   <div className="card-visual-curtain relative aspect-[16/10] w-full overflow-hidden bg-[#0d1212] flex items-center justify-center p-6 sm:p-8 will-change-[clip-path]">
@@ -291,35 +315,20 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                     </div>
                   </div>
 
-                  {/* Card Content & Details */}
-                  <div className="p-6 sm:p-7 flex flex-col justify-between flex-1 bg-[#111616]">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-mono uppercase tracking-wider text-[var(--primary-color)]">
-                          {project.category}
-                        </span>
-                        <span className="text-xs text-[#6f7781] font-mono">{project.year}</span>
-                      </div>
-
-                      <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight group-hover:text-[var(--primary-color)] transition-colors duration-300">
+                  {/* Card Content & Details (1:1 Scalient layout) */}
+                  <div className="p-6 sm:p-7 flex items-center justify-between bg-white border-t border-black/5">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4">
+                      <h3 className="text-xl sm:text-2xl font-bold text-[#080d0d] tracking-tight group-hover:text-[var(--primary-color)] transition-colors duration-300">
                         {project.title}
                       </h3>
-
-                      <p className="mt-2 text-sm text-[#899698] font-normal leading-relaxed line-clamp-2">
-                        {project.summary}
-                      </p>
+                      <span className="text-xs sm:text-sm text-[#6f7781] font-medium">
+                        {project.category} — {project.year}
+                      </span>
                     </div>
 
-                    {/* Tech Stack Tags */}
-                    <div className="flex flex-wrap gap-2 mt-5 pt-4 border-t border-white/5">
-                      {project.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2.5 py-1 rounded-lg bg-white/[0.04] text-[11px] font-medium text-[#899698]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold text-[#080d0d] group-hover:text-[var(--primary-color)] transition-colors">
+                      <span className="underline underline-offset-4 decoration-black/20 group-hover:decoration-[var(--primary-color)]">View Project</span>
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </div>
                   </div>
                 </Link>
@@ -330,8 +339,8 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
 
         {/* Bottom Call to Action */}
         <div ref={bottomCtaRef} className="mt-14 sm:mt-16 flex justify-center">
-          <Button variant="secondary" size="default" href="/work">
-            View All Case Studies
+          <Button variant="primary" size="default" href="/work">
+            View Works
           </Button>
         </div>
       </div>

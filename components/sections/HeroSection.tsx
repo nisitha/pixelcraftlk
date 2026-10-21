@@ -56,63 +56,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
 
       // 1. Badge reveals
       if (badgeRef.current) {
-        tl.from(badgeRef.current, {
-          y: 20,
-          opacity: 0,
-          duration: 0.6,
-          delay: 0.15,
-        });
+        tl.fromTo(
+          badgeRef.current,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, delay: 0.1, clearProps: 'transform,opacity' }
+        );
       }
 
       // 2. Headline reveals with upward slide
       if (headlineRef.current) {
-        tl.from(
+        tl.fromTo(
           headlineRef.current,
-          {
-            y: 35,
-            opacity: 0,
-            duration: 0.8,
-          },
+          { y: 35, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, clearProps: 'transform,opacity' },
           '-=0.35'
         );
       }
 
       // 3. Subtitle paragraph reveals
       if (paragraphRef.current) {
-        tl.from(
+        tl.fromTo(
           paragraphRef.current,
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, clearProps: 'transform,opacity' },
           '-=0.5'
         );
       }
 
       // 4. Dual CTA buttons reveal
       if (buttonsRef.current) {
-        tl.from(
+        tl.fromTo(
           buttonsRef.current,
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, clearProps: 'transform,opacity' },
           '-=0.4'
         );
       }
 
       // 5. Showcase cards stagger up into position
       if (cardsRef.current && cardsRef.current.children.length > 0) {
-        tl.from(
+        tl.fromTo(
           cardsRef.current.children,
-          {
-            y: 45,
-            opacity: 0,
-            duration: 0.9,
-            stagger: 0.1,
-          },
+          { y: 45, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.08, clearProps: 'transform,opacity' },
           '-=0.35'
         );
       }
@@ -143,8 +129,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
               ref={badgeRef}
               className="sub-title-wrap inline-flex items-center gap-2.5 p-1.5 pr-4 rounded-full bg-white/[0.06] border border-white/10 hover:border-white/20 transition-colors shadow-sm select-none"
             >
-              <span className="new-text rounded-full bg-white text-[#080d0d] text-xs font-semibold px-2.5 py-1 tracking-tight">
-                New
+              <span className="new-text rounded-full bg-[var(--primary-color)] text-[#080d0d] text-xs font-bold px-2.5 py-1 tracking-tight flex items-center gap-1">
+                <span>✦</span> New
               </span>
               <span className="inner-sub-title text-xs sm:text-sm font-medium text-white/90">
                 High-Performance Digital Engineering
@@ -155,11 +141,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Display Headline */}
             <h1
               ref={headlineRef}
-              className="inner-title mt-4 sm:mt-5 text-[38px] sm:text-[54px] md:text-[66px] lg:text-[76px] xl:text-[80px] font-semibold tracking-[-0.038em] leading-[1.04] text-white text-center max-w-[820px]"
+              className="inner-title mt-4 sm:mt-5 text-[38px] sm:text-[54px] md:text-[66px] lg:text-[76px] xl:text-[80px] font-semibold tracking-[-0.038em] leading-[1.04] text-white text-center max-w-[840px]"
             >
               Fueling the Next{' '}
               <br className="hidden sm:inline" />
-              Generation of Brands
+              Generation of{' '}
+              <span className="font-script font-normal text-[var(--primary-color)] text-[48px] sm:text-[66px] md:text-[80px] lg:text-[92px] xl:text-[98px] italic leading-none align-baseline">
+                Brands
+              </span>
             </h1>
 
             {/* Sub-headline Paragraph */}

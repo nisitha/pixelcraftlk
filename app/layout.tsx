@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Italianno } from "next/font/google";
 import { Navbar } from "@/components/navigation";
 import { FooterSection } from "@/components/sections";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -68,9 +69,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col bg-[var(--dark-color)] text-white font-sans antialiased overflow-x-hidden pt-[80px]">
-        <Navbar />
-        <div className="flex-1 flex flex-col">{children}</div>
-        <FooterSection />
+        <SmoothScrollProvider>
+          <Navbar />
+          <div className="flex-1 flex flex-col">{children}</div>
+          <FooterSection />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

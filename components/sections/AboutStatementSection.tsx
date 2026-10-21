@@ -91,15 +91,15 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
         gsap.fromTo(
           words,
           {
-            opacity: 0.22,
-            color: '#475354',
+            opacity: 0.25,
+            color: '#b5b5be',
           },
           {
             opacity: 1,
             color: (index, target) => {
               return target.getAttribute('data-script') === 'true'
-                ? '#bcea3e'
-                : '#ffffff';
+                ? '#7970ff'
+                : '#080d0d';
             },
             stagger: 0.08,
             ease: 'none',
@@ -115,18 +115,23 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
 
       // Bottom media cards entrance
       if (cardsRowRef.current) {
-        gsap.from(cardsRowRef.current.children, {
-          y: 40,
-          opacity: 0,
-          duration: 0.85,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: cardsRowRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          cardsRowRef.current.children,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.15,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: cardsRowRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
     }, sectionRef);
 
@@ -139,31 +144,15 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
       id="about-statement"
       aria-label="About Statement"
       className={cn(
-        'section about-v1 relative bg-[var(--dark-color)] text-white py-24 sm:py-32 lg:py-40 overflow-hidden border-t border-white/5',
+        'section about-v1 relative bg-[#f4f4f6] text-[#080d0d] py-24 sm:py-32 lg:py-36 overflow-hidden',
         className
       )}
     >
-      {/* Ambient background soft glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] rounded-full blur-[140px] pointer-events-none opacity-25"
-        style={{
-          background: 'radial-gradient(circle, rgba(188, 234, 62, 0.12) 0%, rgba(121, 112, 255, 0.04) 50%, transparent 70%)',
-        }}
-      />
-
-      {/* Decorative vertical guide lines */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-10 flex justify-between max-w-[1290px] mx-auto px-5 sm:px-8">
-        <div className="w-[1px] h-full bg-white/20" />
-        <div className="w-[1px] h-full bg-white/20 hidden md:block" />
-        <div className="w-[1px] h-full bg-white/20" />
-      </div>
-
       <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
         {/* Top Split: Label on left, Two-Tone Editorial Manifesto on right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16 sm:mb-20">
           <div className="lg:col-span-3">
-            <span className="text-sm sm:text-base font-medium text-[#899698] tracking-tight block">
+            <span className="text-sm sm:text-base font-semibold text-[#6f7781] tracking-tight block">
               About PixelCraft
             </span>
           </div>
@@ -171,7 +160,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
           <div className="lg:col-span-9">
             <h2
               ref={textRef}
-              className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[54px] xl:text-[60px] font-semibold tracking-[-0.035em] leading-[1.18] flex flex-wrap"
+              className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[54px] xl:text-[60px] font-semibold tracking-[-0.038em] leading-[1.16] flex flex-wrap text-[#080d0d]"
             >
               {manifestoWords.map((item, idx) => {
                 if (item.isScript) {
@@ -200,31 +189,31 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
         </div>
 
         {/* Bottom Split: Two Team Media Cards + CTA on right */}
-        <div ref={cardsRowRef} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-8 border-t border-white/5">
-          <div className="md:col-span-5 rounded-2xl overflow-hidden border border-white/10 bg-white/5 aspect-[4/3] relative group shadow-2xl">
+        <div ref={cardsRowRef} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-8 border-t border-black/10">
+          <div className="md:col-span-5 rounded-3xl overflow-hidden border border-black/5 bg-white aspect-[4/3] relative group shadow-lg">
             <Image
               src="/hero/team-collab.jpg"
               alt="PixelCraft Strategic Collaboration"
               fill
               sizes="(max-width: 768px) 100vw, 42vw"
-              className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
+              className="object-cover grayscale contrast-115 group-hover:scale-105 transition-transform duration-500"
             />
           </div>
 
-          <div className="md:col-span-4 rounded-2xl overflow-hidden border border-white/10 bg-white/5 aspect-[4/3] relative group shadow-2xl">
+          <div className="md:col-span-4 rounded-3xl overflow-hidden border border-black/5 bg-white aspect-[4/3] relative group shadow-lg">
             <Image
               src="/hero/team-collab.jpg"
               alt="PixelCraft Engineering Architecture"
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-500 scale-x-[-1]"
+              className="object-cover grayscale contrast-115 group-hover:scale-105 transition-transform duration-500 scale-x-[-1]"
             />
           </div>
 
           <div className="md:col-span-3 flex flex-col items-start gap-4 p-2 sm:p-4">
-            <span className="text-sm font-semibold text-white tracking-tight">
-              Our Bold &amp; Visionary Builders
-            </span>
+            <h3 className="text-lg sm:text-xl font-bold text-[#080d0d] tracking-tight leading-snug">
+              Our Bold and <br /> Brilliant Thinkers
+            </h3>
             <div>
               <Button variant="primary" size="default" href="/about">
                 Learn More

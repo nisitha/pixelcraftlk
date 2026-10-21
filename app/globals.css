@@ -13,6 +13,15 @@
   --border-subtle: #dedede;
   --border-highlight: rgba(188, 234, 62, 0.35);
 
+  /* Light Canvas & Alternate Sections */
+  --light-canvas: #f4f4f6;
+  --light-card: #ffffff;
+  --light-border: rgba(0, 0, 0, 0.08);
+  --light-border-subtle: #e5e5ea;
+  --light-text: #080d0d;
+  --light-muted: #6f7781;
+  --light-muted-soft: #8e8e93;
+
   /* Accents & Feedback */
   --primary-color: #bcea3e;
   --blue-color: #7970ff;
@@ -91,6 +100,26 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {

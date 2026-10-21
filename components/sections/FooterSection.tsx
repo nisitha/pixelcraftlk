@@ -38,31 +38,41 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
 
     const ctx = gsap.context(() => {
       if (newsletterRef.current) {
-        gsap.from(newsletterRef.current, {
-          y: 35,
-          opacity: 0,
-          duration: 0.85,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: newsletterRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          newsletterRef.current,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: newsletterRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
 
       if (watermarkRef.current) {
-        gsap.from(watermarkRef.current, {
-          y: 40,
-          opacity: 0,
-          duration: 1.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: watermarkRef.current,
-            start: 'top 95%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          watermarkRef.current,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.1,
+            ease: 'power2.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: watermarkRef.current,
+              start: 'top 95%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
     }, footerRef);
 
@@ -88,258 +98,141 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
       )}
     >
       <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
-        {/* Newsletter Subscription Row */}
-        <div ref={newsletterRef} className="rounded-3xl bg-[#0f1414] border border-white/10 p-8 sm:p-12 mb-16 sm:mb-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
-          {/* Subtle background glow */}
-          <div
-            aria-hidden="true"
-            className="absolute top-0 right-0 w-[400px] h-[300px] rounded-full blur-[120px] pointer-events-none opacity-20"
-            style={{
-              background: 'radial-gradient(circle, rgba(188, 234, 62, 0.15) 0%, transparent 70%)',
-            }}
-          />
+        {/* Main Footer Row: Newsletter on Left, 4 Columns on Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-16 border-b border-white/10 items-start">
+          {/* Left Column: Newsletter capture */}
+          <div ref={newsletterRef} className="lg:col-span-5 flex flex-col justify-between">
+            <div>
+              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.12] mb-6">
+                Sign up for our <br />
+                newsletter today.
+              </h2>
 
-          <div className="relative z-10 max-w-xl">
-            <span className="text-xs font-mono uppercase tracking-widest text-[var(--primary-color)] block mb-2 font-semibold">
-              STAY INFORMED //
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
-              Sign up for our newsletter today.
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-[#899698] font-normal leading-relaxed">
-              Get exclusive engineering breakdowns, architectural insights, and design teardowns delivered directly to your inbox.
-            </p>
-          </div>
-
-          <div className="relative z-10 w-full lg:max-w-md">
-            {isSubmitted ? (
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/30 text-[var(--primary-color)] text-sm font-semibold">
-                <CheckCircle2 className="w-5 h-5 shrink-0" />
-                <span>Thank you for subscribing! Check your inbox for confirmation.</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-3">
-                <div className="relative w-full">
+              {isSubmitted ? (
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/30 text-[var(--primary-color)] text-sm font-semibold max-w-md">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
+                  <span>Thank you for subscribing! Check your inbox for confirmation.</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex items-center rounded-full bg-[#111616] border border-white/10 p-1.5 max-w-md shadow-lg focus-within:border-[var(--primary-color)] transition-colors">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your work email..."
+                    placeholder="Your email"
                     required
                     aria-label="Email address for newsletter"
-                    className="w-full h-[52px] px-5 rounded-full bg-white/5 border border-white/10 hover:border-white/20 focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)] text-sm text-white placeholder-[#6f7781] transition-all"
+                    className="w-full bg-transparent px-4 text-sm text-white placeholder-[#6f7781] outline-none"
                   />
-                </div>
+                  <button
+                    type="submit"
+                    className="shrink-0 h-[44px] px-6 rounded-full bg-[var(--primary-color)] hover:brightness-105 active:scale-95 text-[#080d0d] text-sm font-bold transition-all flex items-center justify-center cursor-pointer shadow-md"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              )}
 
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto shrink-0 h-[52px] px-7 rounded-full bg-[var(--primary-color)] hover:brightness-105 active:scale-95 text-[#080d0d] text-sm font-semibold transition-all flex items-center justify-center gap-2 select-none shadow-lg"
-                >
-                  <span>Subscribe</span>
-                  <Send className="w-4 h-4" />
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-
-        {/* 4-Column Structured Navigation Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12 pb-16 border-b border-white/10">
-          {/* Column 1: Brand Info (5 cols on lg) */}
-          <div className="lg:col-span-5 flex flex-col justify-between">
-            <div>
-              <div className="inline-block mb-6">
-                <PixelCraftLogo />
-              </div>
-
-              <p className="text-sm sm:text-base text-[#899698] font-normal leading-relaxed max-w-sm mb-6">
-                PixelCraft Studios engineers world-class web applications, bespoke design systems, and high-velocity digital architectures for visionary modern brands.
+              <p className="mt-3 text-xs sm:text-sm text-[#6f7781] font-normal">
+                No spam, Just valued update.
               </p>
             </div>
+          </div>
 
-            <div className="space-y-2.5 text-xs text-[#899698]">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[var(--primary-color)] shrink-0" />
-                <span>{siteConfig.address}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[var(--primary-color)] shrink-0" />
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-white transition-colors">
-                  {siteConfig.email}
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[var(--primary-color)] shrink-0" />
-                <span>{siteConfig.phone}</span>
-              </div>
+          {/* Right Columns: 4 Nav Columns (Main, Inner, Utility, Social) */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {/* Column 1: Main Pages */}
+            <div>
+              <span className="text-sm font-semibold text-white block mb-4">
+                Main Pages
+              </span>
+              <ul className="space-y-2.5 text-sm text-[#899698]">
+                <li><Link href="/" className="hover:text-[var(--primary-color)] transition-colors">Home</Link></li>
+                <li><Link href="/about" className="hover:text-[var(--primary-color)] transition-colors">Company</Link></li>
+                <li><Link href="/work" className="hover:text-[var(--primary-color)] transition-colors">Works</Link></li>
+                <li><Link href="/service" className="hover:text-[var(--primary-color)] transition-colors">Services</Link></li>
+                <li><Link href="/pricing" className="hover:text-[var(--primary-color)] transition-colors">Pricing</Link></li>
+                <li><Link href="/career" className="hover:text-[var(--primary-color)] transition-colors">Career</Link></li>
+                <li><Link href="/contact" className="hover:text-[var(--primary-color)] transition-colors">Contact</Link></li>
+              </ul>
             </div>
-          </div>
 
-          {/* Column 2: Company Links (2 cols on lg) */}
-          <div className="lg:col-span-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-white/50 block mb-5 font-semibold">
-              COMPANY
-            </span>
-            <ul className="space-y-3 text-sm text-[#899698]">
-              <li>
-                <Link href="/about" className="hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/work" className="hover:text-white transition-colors">
-                  Selected Works
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="hover:text-white transition-colors">
-                  Pricing Plans
-                </Link>
-              </li>
-              <li>
-                <Link href="/career" className="hover:text-white transition-colors inline-flex items-center gap-1.5">
-                  <span>Careers</span>
-                  <span className="text-[10px] font-semibold bg-[var(--primary-color)] text-[#080d0d] px-1.5 py-0.2 rounded-full">
-                    Hiring
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
+            {/* Column 2: Inner Pages */}
+            <div>
+              <span className="text-sm font-semibold text-white block mb-4">
+                Inner Pages
+              </span>
+              <ul className="space-y-2.5 text-sm text-[#899698]">
+                <li><Link href="/work/growth-engine" className="hover:text-[var(--primary-color)] transition-colors">Works Details</Link></li>
+                <li><Link href="/product/professional" className="hover:text-[var(--primary-color)] transition-colors">Pricing Details</Link></li>
+                <li><Link href="/service/marketing-automation" className="hover:text-[var(--primary-color)] transition-colors">Service Details</Link></li>
+                <li><Link href="/career/seo-specialist" className="hover:text-[var(--primary-color)] transition-colors">Career Details</Link></li>
+                <li><Link href="/terms-condition" className="hover:text-[var(--primary-color)] transition-colors">Terms &amp; Condition</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-[var(--primary-color)] transition-colors">Privacy Policy</Link></li>
+              </ul>
+            </div>
 
-          {/* Column 3: Services Links (3 cols on lg) */}
-          <div className="lg:col-span-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-white/50 block mb-5 font-semibold">
-              GROWTH SOLUTIONS
-            </span>
-            <ul className="space-y-3 text-sm text-[#899698]">
-              <li>
-                <Link href="/service/content-marketing" className="hover:text-white transition-colors">
-                  Content Marketing &amp; Strategy
-                </Link>
-              </li>
-              <li>
-                <Link href="/service/marketing-automation" className="hover:text-white transition-colors">
-                  Marketing Automation &amp; CDP
-                </Link>
-              </li>
-              <li>
-                <Link href="/service/influencer-marketing" className="hover:text-white transition-colors">
-                  Influencer Brand Systems
-                </Link>
-              </li>
-              <li>
-                <Link href="/service/email-marketing" className="hover:text-white transition-colors">
-                  Lifecycle &amp; Email Marketing
-                </Link>
-              </li>
-              <li>
-                <Link href="/request-a-demo" className="hover:text-white transition-colors text-[var(--primary-color)]">
-                  Request a Custom Demo →
-                </Link>
-              </li>
-            </ul>
-          </div>
+            {/* Column 3: Utility Pages */}
+            <div>
+              <span className="text-sm font-semibold text-white block mb-4">
+                Utility Pages
+              </span>
+              <ul className="space-y-2.5 text-sm text-[#899698]">
+                <li><Link href="/license" className="hover:text-[var(--primary-color)] transition-colors">License</Link></li>
+                <li><Link href="/changelog" className="hover:text-[var(--primary-color)] transition-colors">Change Log</Link></li>
+                <li><Link href="/style-guide" className="hover:text-[var(--primary-color)] transition-colors">Style Guide</Link></li>
+                <li><Link href="/401" className="hover:text-[var(--primary-color)] transition-colors">Password</Link></li>
+                <li><Link href="/coming-soon" className="hover:text-[var(--primary-color)] transition-colors">Coming Soon</Link></li>
+                <li><Link href="/request-a-demo" className="hover:text-[var(--primary-color)] transition-colors">Request a Demo</Link></li>
+                <li><Link href="/404" className="hover:text-[var(--primary-color)] transition-colors">404</Link></li>
+              </ul>
+            </div>
 
-          {/* Column 4: Resources & Legal (2 cols on lg) */}
-          <div className="lg:col-span-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-white/50 block mb-5 font-semibold">
-              RESOURCES &amp; LEGAL
-            </span>
-            <ul className="space-y-3 text-sm text-[#899698]">
-              <li>
-                <Link href="/blog" className="hover:text-white transition-colors">
-                  Market Insights
-                </Link>
-              </li>
-              <li>
-                <Link href="/style-guide" className="hover:text-white transition-colors">
-                  Design Tokens
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-condition" className="hover:text-white transition-colors">
-                  Terms &amp; Conditions
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className="hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/license" className="hover:text-white transition-colors">
-                  Licensing
-                </Link>
-              </li>
-            </ul>
+            {/* Column 4: Social Media */}
+            <div>
+              <span className="text-sm font-semibold text-white block mb-4">
+                Social Media
+              </span>
+              <ul className="space-y-3 text-sm text-[#899698]">
+                <li>
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--primary-color)] transition-colors flex items-center gap-2">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <span>Facebook</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--primary-color)] transition-colors flex items-center gap-2">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span>X</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--primary-color)] transition-colors flex items-center gap-2">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <span>Instagram</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Legal Copyright Bar */}
+        {/* Bottom Legal Copyright Bar (1:1 Scalient Parity) */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6f7781]">
-          <div className="flex items-center gap-2">
-            <span>© {siteConfig.foundingYear} {siteConfig.name}. All rights reserved.</span>
+          <Link href="/privacy-policy" className="hover:text-white transition-colors">
+            Privacy policy
+          </Link>
+
+          <div className="text-center">
+            <span>© Copyright 2026 | Design &amp; Developed By </span>
+            <span className="font-semibold text-white">PixelCraft Studios</span>
+            <span> - </span>
+            <Link href="/license" className="hover:text-white transition-colors">License</Link>
           </div>
 
-          {/* System status indicator */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-white/80">
-            <span className="w-2 h-2 rounded-full bg-[var(--primary-color)] animate-pulse" />
-            <span className="font-mono text-[11px]">All Systems Operational</span>
-          </div>
-
-          {/* Back to top control */}
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Scroll back to top of page"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-[#899698] hover:text-white transition-colors text-xs font-medium cursor-pointer"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-[var(--primary-color)]" />
-          </button>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-4">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="PixelCraft on X / Twitter"
-              className="text-[#899698] hover:text-white transition-colors"
-            >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="PixelCraft on LinkedIn"
-              className="text-[#899698] hover:text-white transition-colors"
-            >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-              </svg>
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="PixelCraft on GitHub"
-              className="text-[#899698] hover:text-white transition-colors"
-            >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-              </svg>
-            </a>
-          </div>
+          <Link href="/terms-condition" className="hover:text-white transition-colors">
+            Terms of Use
+          </Link>
         </div>
 
         {/* Giant Watermark Brand Signature matching reference */}

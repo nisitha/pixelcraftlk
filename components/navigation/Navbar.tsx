@@ -32,24 +32,22 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
       <header
         role="banner"
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          isScrolled
-            ? 'py-3 bg-[var(--dark-color)]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.6)]'
-            : 'py-5 bg-transparent border-b border-transparent',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center px-4 sm:px-6 pointer-events-none',
+          isScrolled ? 'pt-3' : 'pt-4 sm:pt-5',
           className
         )}
       >
-        <Container size="wide">
+        <div className="w-full max-w-[1280px] pointer-events-auto rounded-full bg-[#080d0d]/85 backdrop-blur-xl border border-white/10 px-5 sm:px-7 py-2.5 sm:py-3 shadow-[0_12px_36px_rgba(0,0,0,0.5)] transition-all duration-300">
           <div className="flex items-center justify-between">
             {/* Left Cluster: Logo & Desktop Navigation Links */}
-            <div className="flex items-center gap-8 xl:gap-12">
+            <div className="flex items-center gap-7 xl:gap-10">
               <PixelCraftLogo />
 
               {/* Desktop Nav Links (≥ 992px) */}
               <nav
                 role="navigation"
                 aria-label="Primary Navigation"
-                className="hidden lg:flex items-center gap-7 xl:gap-9"
+                className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm"
               >
                 <NavLink href="/about" label="Company" />
                 <MegaMenu />
@@ -66,18 +64,18 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 type="button"
                 onClick={() => setCartOpen(true)}
                 aria-label="Open Project Scope Cart"
-                className="relative flex items-center justify-center w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[var(--primary-color)] transition-all duration-200 cursor-pointer"
+                className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[var(--primary-color)] transition-all duration-200 cursor-pointer"
               >
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingBag className="w-4 h-4" />
                 {/* Cart Quantity Badge */}
-                <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[var(--primary-color)] text-[var(--dark-color)] text-[11px] font-bold shadow-sm">
+                <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[17px] h-[17px] px-1 rounded-full bg-[var(--primary-color)] text-[var(--dark-color)] text-[10px] font-bold shadow-sm">
                   {cartCount}
                 </span>
               </button>
 
               {/* Primary Action Button (Desktop Only) */}
               <div className="hidden sm:inline-flex">
-                <Button variant="white" size="default" href="/contact" showIcon={false}>
+                <Button variant="white" size="sm" href="/contact" showIcon={false}>
                   Contact Now
                 </Button>
               </div>
@@ -88,13 +86,13 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Open mobile navigation menu"
                 aria-expanded={mobileMenuOpen}
-                className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-white hover:text-[var(--primary-color)] transition-colors cursor-pointer"
+                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:text-[var(--primary-color)] transition-colors cursor-pointer"
               >
-                <Menu className="w-5 h-5" />
+                <Menu className="w-4 h-4" />
               </button>
             </div>
           </div>
-        </Container>
+        </div>
       </header>
 
       {/* Cart Slide-Over Drawer */}

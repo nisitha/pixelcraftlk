@@ -51,33 +51,43 @@ export const GrowthServicesSection: React.FC<GrowthServicesSectionProps> = ({ cl
 
     const ctx = gsap.context(() => {
       if (headerRef.current) {
-        gsap.from(headerRef.current, {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          headerRef.current,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
 
       if (cardsRef.current) {
         const cards = cardsRef.current.querySelectorAll('.service-card-item');
-        gsap.from(cards, {
-          y: 40,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          cards,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: cardsRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
     }, sectionRef);
 
@@ -129,59 +139,49 @@ export const GrowthServicesSection: React.FC<GrowthServicesSectionProps> = ({ cl
           </div>
         </div>
 
-        {/* 4 Feature Service Cards (2x2 Grid) */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        {/* 4 Feature Service Cards (4-Column Layout matching Scalient) */}
+        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
           {growthServices.map((service, index) => (
             <div
               key={service.id}
-              className="service-card-item group relative rounded-3xl bg-[#111616] border border-white/10 hover:border-[var(--primary-color)]/60 hover:bg-[#161c1c] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(188,234,62,0.15)] transition-all duration-400 ease-out p-7 sm:p-9 shadow-2xl flex flex-col justify-between cursor-pointer"
+              className="service-card-item group relative rounded-3xl bg-[#111616] text-white border border-white/10 hover:bg-white hover:text-[#080d0d] hover:border-white hover:-translate-y-3 hover:shadow-[0_25px_60px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out p-6 sm:p-7 shadow-2xl flex flex-col justify-between cursor-pointer min-h-[380px]"
             >
               <div>
                 {/* Upper Row: Icon Badge & Number Indicator */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/25 flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--primary-color)] group-hover:border-[var(--primary-color)] transition-all duration-300 shadow-md">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--primary-color)]/15 border border-[var(--primary-color)]/30 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#080d0d] group-hover:border-[#080d0d] transition-all duration-300 shadow-md">
                     {getServiceIcon(service.icon)}
                   </div>
-                  <span className="text-xs font-mono uppercase tracking-widest text-[#6f7781] group-hover:text-[var(--primary-color)] transition-colors">
-                    {`0${index + 1} //`}
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#6f7781] group-hover:text-[#6f7781] transition-colors">
+                    {`0${index + 1}`}
                   </span>
                 </div>
 
-                <span className="text-xs font-mono uppercase tracking-wider text-[var(--primary-color)] font-medium">
+                <span className="text-xs font-mono uppercase tracking-wider text-[var(--primary-color)] group-hover:text-[#6f7781] font-semibold transition-colors">
                   {service.category}
                 </span>
 
-                <h3 className="text-2xl sm:text-[26px] font-semibold text-white tracking-tight mt-1 mb-3 group-hover:text-[var(--primary-color)] transition-colors duration-300">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-[#080d0d] mt-1.5 mb-3 transition-colors duration-300">
                   {service.title}
                 </h3>
 
-                <p className="text-base text-[#899698] font-normal leading-relaxed">
+                <p className="text-sm text-[#899698] group-hover:text-[#475354] font-normal leading-relaxed transition-colors">
                   {service.description}
                 </p>
-
-                {/* Deliverables Checklist */}
-                <div className="mt-6 pt-6 border-t border-white/5 space-y-2.5">
-                  {service.deliverables.map((item) => (
-                    <div key={item} className="flex items-center gap-2.5 text-sm text-white/90">
-                      <CheckCircle2 className="w-4 h-4 text-[var(--primary-color)] shrink-0" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Bottom Action Row */}
-              <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-6 pt-5 border-t border-white/10 group-hover:border-black/10 flex items-center justify-between transition-colors">
                 <Link
                   href={`/service/${service.slug}`}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-white group-hover:text-[var(--primary-color)] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-white group-hover:text-[#080d0d] transition-colors"
                 >
-                  <span>Explore Service Architecture</span>
-                  <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <span>Explore Service</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
 
-                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#899698] group-hover:bg-[var(--primary-color)] group-hover:text-[#080d0d] group-hover:border-[var(--primary-color)] group-hover:scale-110 transition-all duration-300 shadow-md">
-                  <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#899698] group-hover:bg-[#080d0d] group-hover:text-[var(--primary-color)] group-hover:border-[#080d0d] group-hover:scale-110 transition-all duration-300 shadow-sm">
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </div>
             </div>

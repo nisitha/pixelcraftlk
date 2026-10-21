@@ -50,51 +50,66 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
 
       // 2. Header reveal
       if (headerRef.current) {
-        gsap.from(headerRef.current, {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          headerRef.current,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
 
       // 3. Staggered Metric Cards entrance
       if (metricsGridRef.current) {
         const cards = metricsGridRef.current.querySelectorAll('.metric-card-item');
-        gsap.from(cards, {
-          y: 40,
-          opacity: 0,
-          duration: 0.85,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: metricsGridRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          cards,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.12,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: metricsGridRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
 
       // 4. Staggered Strategic Badges entrance
       if (pillsRef.current) {
         const pills = pillsRef.current.children;
-        gsap.from(pills, {
-          y: 20,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.04,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: pillsRef.current,
-            start: 'top 90%',
-            toggleActions: 'play none none none',
-          },
-        });
+        gsap.fromTo(
+          pills,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.04,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: {
+              trigger: pillsRef.current,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
       }
     }, sectionRef);
 

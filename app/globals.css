@@ -231,6 +231,11 @@ body {
   }
 }
 
+/* Card Curtain Clip-Path Reveal Helper */
+.work-card-item {
+  will-change: clip-path, transform, opacity;
+}
+
 /* Infinite Marquee Animation */
 @keyframes marquee {
   0% {

@@ -1,0 +1,74 @@
+<svg width="280" height="140" viewBox="0 0 280 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stylized Dotted World Map Silhouette for Global Enterprise Card -->
+  <g opacity="0.18" fill="#111616">
+    <!-- North America -->
+    <circle cx="45" cy="38" r="2.5"/>
+    <circle cx="55" cy="35" r="3"/>
+    <circle cx="65" cy="32" r="3.5"/>
+    <circle cx="75" cy="30" r="3"/>
+    <circle cx="50" cy="46" r="3.5"/>
+    <circle cx="60" cy="44" r="4"/>
+    <circle cx="70" cy="42" r="4"/>
+    <circle cx="80" cy="45" r="3.5"/>
+    <circle cx="58" cy="55" r="3"/>
+    <circle cx="68" cy="54" r="3.5"/>
+    <circle cx="76" cy="56" r="3"/>
+    <circle cx="65" cy="65" r="2.5"/>
+
+    <!-- South America -->
+    <circle cx="82" cy="80" r="3"/>
+    <circle cx="90" cy="85" r="3.5"/>
+    <circle cx="86" cy="95" r="4"/>
+    <circle cx="94" cy="98" r="3.5"/>
+    <circle cx="88" cy="108" r="3"/>
+    <circle cx="92" cy="118" r="2.5"/>
+
+    <!-- Europe -->
+    <circle cx="132" cy="32" r="2.5"/>
+    <circle cx="140" cy="28" r="3"/>
+    <circle cx="148" cy="30" r="3.5"/>
+    <circle cx="138" cy="38" r="3.5"/>
+    <circle cx="146" cy="39" r="4"/>
+    <circle cx="154" cy="36" r="3.5"/>
+    <circle cx="142" cy="48" r="3"/>
+    <circle cx="150" cy="46" r="3.5"/>
+
+    <!-- Africa -->
+    <circle cx="138" cy="62" r="3.5"/>
+    <circle cx="148" cy="60" r="4"/>
+    <circle cx="158" cy="62" r="3.5"/>
+    <circle cx="142" cy="72" r="4"/>
+    <circle cx="152" cy="74" r="4.5"/>
+    <circle cx="160" cy="75" r="3.5"/>
+    <circle cx="146" cy="85" r="4"/>
+    <circle cx="154" cy="88" r="3.5"/>
+    <circle cx="150" cy="100" r="3"/>
+    <circle cx="152" cy="110" r="2.5"/>
+
+    <!-- Asia -->
+    <circle cx="170" cy="30" r="3"/>
+    <circle cx="180" cy="28" r="3.5"/>
+    <circle cx="192" cy="32" r="4"/>
+    <circle cx="204" cy="35" r="3.5"/>
+    <circle cx="216" cy="34" r="3"/>
+    <circle cx="172" cy="42" r="3.5"/>
+    <circle cx="184" cy="40" r="4"/>
+    <circle cx="196" cy="44" r="4.5"/>
+    <circle cx="208" cy="46" r="4"/>
+    <circle cx="220" cy="45" r="3.5"/>
+    <circle cx="180" cy="54" r="4"/>
+    <circle cx="192" cy="56" r="4.5"/>
+    <circle cx="204" cy="58" r="4"/>
+    <circle cx="196" cy="68" r="3.5"/>
+    <circle cx="206" cy="70" r="3"/>
+
+    <!-- Australia -->
+    <circle cx="224" cy="94" r="3"/>
+    <circle cx="234" cy="92" r="3.5"/>
+    <circle cx="244" cy="95" r="3"/>
+    <circle cx="228" cy="104" r="3.5"/>
+    <circle cx="238" cy="105" r="4"/>
+    <circle cx="246" cy="104" r="3"/>
+    <circle cx="236" cy="115" r="2.5"/>
+  </g>
+</svg>

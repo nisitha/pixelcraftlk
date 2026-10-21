@@ -71,13 +71,13 @@ export const Button: React.FC<ButtonProps> = ({
       )}
     >
       {/* Layer 1: Normal View (Slides up from 0% to -100% on hover) */}
-      <div className="primary-btn-text-wrap _01 flex items-center gap-2">
+      <div className="primary-btn-text-wrap _01 flex items-center justify-center gap-2">
         <span>{children}</span>
         {iconElement}
       </div>
 
       {/* Layer 2: Rolled View (Slides up from +100% to 0% on hover) */}
-      <div className="primary-btn-text-wrap _02 flex items-center justify-center gap-2" aria-hidden="true">
+      <div className="primary-btn-text-wrap _02 absolute inset-0 w-full h-full flex items-center justify-center gap-2" aria-hidden="true">
         <span>{children}</span>
         {iconElement}
       </div>

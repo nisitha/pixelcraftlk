@@ -1,11 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PixelCraftLogo } from '@/components/navigation/PixelCraftLogo';
 import { CheckCircle2, Send, Mail, MapPin, Phone, ArrowUp } from 'lucide-react';
 import { siteConfig } from '@/data/site';
 import { cn } from '@/lib/utils';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export interface FooterSectionProps {
   className?: string;
@@ -19,6 +25,50 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const footerRef = useRef<HTMLElement>(null);
+  const newsletterRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (newsletterRef.current) {
+        gsap.from(newsletterRef.current, {
+          y: 35,
+          opacity: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: newsletterRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+
+      if (watermarkRef.current) {
+        gsap.from(watermarkRef.current, {
+          y: 40,
+          opacity: 0,
+          duration: 1.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: watermarkRef.current,
+            start: 'top 95%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email && email.includes('@')) {
@@ -29,6 +79,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
 
   return (
     <footer
+      ref={footerRef}
       id="footer"
       aria-label="Site Footer"
       className={cn(
@@ -38,7 +89,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
     >
       <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
         {/* Newsletter Subscription Row */}
-        <div className="rounded-3xl bg-[#0f1414] border border-white/10 p-8 sm:p-12 mb-16 sm:mb-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+        <div ref={newsletterRef} className="rounded-3xl bg-[#0f1414] border border-white/10 p-8 sm:p-12 mb-16 sm:mb-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
           {/* Subtle background glow */}
           <div
             aria-hidden="true"
@@ -293,6 +344,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
 
         {/* Giant Watermark Brand Signature matching reference */}
         <div
+          ref={watermarkRef}
           aria-hidden="true"
           className="w-full select-none pointer-events-none text-center overflow-hidden pt-10 sm:pt-16 -mb-6 sm:-mb-10"
         >

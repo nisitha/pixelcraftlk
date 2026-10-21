@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { successMetrics, strategicPills } from '@/data/homepage';
 import { Button } from '@/components/ui/Button';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -24,6 +25,7 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const metricsGridRef = useRef<HTMLDivElement>(null);
+  const pillsRef = useRef<HTMLDivElement>(null);
 
   const [hasAnimated, setHasAnimated] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -38,6 +40,7 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
     }
 
     const ctx = gsap.context(() => {
+      // 1. ScrollTrigger to activate smooth number counters
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top 75%',
@@ -45,6 +48,7 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
         onEnter: () => setHasAnimated(true),
       });
 
+      // 2. Header reveal
       if (headerRef.current) {
         gsap.from(headerRef.current, {
           y: 30,
@@ -54,6 +58,40 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
           scrollTrigger: {
             trigger: headerRef.current,
             start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+
+      // 3. Staggered Metric Cards entrance
+      if (metricsGridRef.current) {
+        const cards = metricsGridRef.current.querySelectorAll('.metric-card-item');
+        gsap.from(cards, {
+          y: 40,
+          opacity: 0,
+          duration: 0.85,
+          stagger: 0.12,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: metricsGridRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+
+      // 4. Staggered Strategic Badges entrance
+      if (pillsRef.current) {
+        const pills = pillsRef.current.children;
+        gsap.from(pills, {
+          y: 20,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.04,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: pillsRef.current,
+            start: 'top 90%',
             toggleActions: 'play none none none',
           },
         });
@@ -113,7 +151,13 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
                 </span>
 
                 <div className="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-2 group-hover:text-[var(--primary-color)] transition-colors">
-                  {hasAnimated ? metric.value : '0'}
+                  <AnimatedCounter
+                    numericTarget={metric.numericTarget ?? 0}
+                    suffix={metric.suffix ?? ''}
+                    decimals={metric.decimals ?? 0}
+                    fallbackValue={metric.value}
+                    shouldStart={hasAnimated}
+                  />
                 </div>
 
                 <h3 className="text-lg font-semibold text-white tracking-tight mb-2">
@@ -134,7 +178,7 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
             CORE AGENCY CAPABILITIES
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 max-w-4xl mx-auto">
+          <div ref={pillsRef} className="flex flex-wrap items-center justify-center gap-3 max-w-4xl mx-auto">
             {strategicPills.map((pill) => (
               <div
                 key={pill}

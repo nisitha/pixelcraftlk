@@ -22,7 +22,7 @@ export interface AboutStatementSectionProps {
 export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ className }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
-  const buttonRef = useRef<HTMLDivElement>(null);
+  const cardsRowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -49,16 +49,17 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
         });
       }
 
-      if (buttonRef.current) {
+      if (cardsRowRef.current) {
         tl.from(
-          buttonRef.current,
+          cardsRowRef.current.children,
           {
-            y: 20,
+            y: 35,
             opacity: 0,
-            duration: 0.6,
+            duration: 0.85,
+            stagger: 0.15,
             ease: 'power3.out',
           },
-          '-=0.4'
+          '-=0.45'
         );
       }
     }, sectionRef);
@@ -121,7 +122,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
         </div>
 
         {/* Bottom Split: Two Team Media Cards + CTA on right */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-8 border-t border-white/5">
+        <div ref={cardsRowRef} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end pt-8 border-t border-white/5">
           <div className="md:col-span-5 rounded-2xl overflow-hidden border border-white/10 bg-white/5 aspect-[4/3] relative group shadow-2xl">
             <Image
               src="/hero/team-collab.jpg"
@@ -146,7 +147,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
             <span className="text-sm font-semibold text-white tracking-tight">
               Our Bold &amp; Visionary Builders
             </span>
-            <div ref={buttonRef}>
+            <div>
               <Button variant="primary" size="default" href="/about">
                 Learn More
               </Button>

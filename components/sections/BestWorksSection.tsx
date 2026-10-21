@@ -25,6 +25,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const bottomCtaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -59,6 +60,20 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
           scrollTrigger: {
             trigger: cardsRef.current,
             start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+
+      if (bottomCtaRef.current) {
+        gsap.from(bottomCtaRef.current, {
+          y: 25,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: bottomCtaRef.current,
+            start: 'top 92%',
             toggleActions: 'play none none none',
           },
         });
@@ -229,7 +244,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
         </div>
 
         {/* Bottom Call to Action */}
-        <div className="mt-14 sm:mt-16 flex justify-center">
+        <div ref={bottomCtaRef} className="mt-14 sm:mt-16 flex justify-center">
           <Button variant="secondary" size="default" href="/work">
             View All Case Studies
           </Button>

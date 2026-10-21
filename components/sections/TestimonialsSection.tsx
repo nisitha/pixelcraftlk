@@ -57,6 +57,20 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
           },
         });
       }
+
+      if (sliderRef.current) {
+        gsap.from(sliderRef.current, {
+          y: 40,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sliderRef.current,
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();

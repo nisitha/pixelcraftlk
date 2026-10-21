@@ -64,20 +64,20 @@ export const Button: React.FC<ButtonProps> = ({
   const content = (
     <div
       className={cn(
-        'primary-btn-wrap relative overflow-hidden inline-flex items-center justify-center rounded-full transition-all duration-300 select-none',
+        'primary-btn-wrap relative overflow-hidden inline-flex items-center justify-center rounded-full transition-all duration-300 select-none cursor-pointer',
         variantClasses[variant],
         sizeClasses[size].wrapper,
         className
       )}
     >
-      {/* Layer 1: Normal View (Slides up to -100% on hover) */}
+      {/* Layer 1: Normal View (Slides up from 0% to -100% on hover) */}
       <div className="primary-btn-text-wrap _01 flex items-center gap-2">
         <span>{children}</span>
         {iconElement}
       </div>
 
       {/* Layer 2: Rolled View (Slides up from +100% to 0% on hover) */}
-      <div className="primary-btn-text-wrap _02 absolute inset-0 flex items-center justify-center gap-2">
+      <div className="primary-btn-text-wrap _02 flex items-center justify-center gap-2" aria-hidden="true">
         <span>{children}</span>
         {iconElement}
       </div>
@@ -86,7 +86,10 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <Link href={href} className="group inline-flex">
+      <Link
+        href={href}
+        className="primary-button-root group/pbtn inline-flex rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080d0d]"
+      >
         {content}
       </Link>
     );
@@ -94,7 +97,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className="group inline-flex bg-transparent border-none p-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+      className="primary-button-root group/pbtn inline-flex bg-transparent border-none p-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080d0d]"
       {...props}
     >
       {content}

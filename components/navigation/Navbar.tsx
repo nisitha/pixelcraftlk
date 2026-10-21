@@ -77,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
 
               {/* Primary Action Button (Desktop Only) */}
               <div className="hidden sm:inline-flex">
-                <Button variant="primary" size="default" href="/contact">
+                <Button variant="white" size="default" href="/contact" showIcon={false}>
                   Contact Now
                 </Button>
               </div>

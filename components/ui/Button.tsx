@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'white';
 export type ButtonSize = 'default' | 'sm';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -30,6 +30,8 @@ export const Button: React.FC<ButtonProps> = ({
   const variantClasses: Record<ButtonVariant, string> = {
     primary:
       'bg-[var(--primary-color)] text-[var(--dark-color)] hover:brightness-105 active:scale-[0.98]',
+    white:
+      'bg-white text-[#080d0d] hover:bg-white/90 active:scale-[0.98]',
     secondary:
       'bg-[var(--dark-field)] text-white border border-white/10 hover:border-[var(--primary-color)]/40 hover:bg-[var(--surface-elevated)] active:scale-[0.98]',
     ghost:
@@ -54,7 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
       className={cn(
         'primary-icon shrink-0 transition-transform duration-300',
         sizeClasses[size].icon,
-        variant === 'primary' ? 'text-[var(--dark-color)]' : 'text-white'
+        variant === 'primary' || variant === 'white' ? 'text-[var(--dark-color)]' : 'text-white'
       )}
     />
   ) : null;

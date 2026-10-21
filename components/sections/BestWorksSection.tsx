@@ -87,11 +87,15 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
               <span>Selected Portfolio</span>
             </div>
 
-            {/* Segmented Typography Header */}
-            <h2 className="text-[38px] sm:text-[52px] md:text-[64px] font-semibold tracking-[-0.035em] leading-[1.04] text-white">
-              OUR BEST{' '}
-              <span className="font-script font-normal text-[var(--primary-color)] text-[48px] sm:text-[66px] md:text-[80px] italic">
-                works
+            {/* Segmented Typography Header matching reference */}
+            <h2 className="text-[44px] sm:text-[68px] md:text-[96px] lg:text-[120px] font-black tracking-tight leading-[0.94] text-white uppercase flex flex-col">
+              <span>OUR BEST</span>
+              <span className="inline-flex items-center gap-2 sm:gap-3 flex-wrap">
+                <span>WOR</span>
+                <span className="inline-flex items-center justify-center w-[54px] sm:w-[80px] md:w-[108px] h-[32px] sm:h-[48px] md:h-[64px] rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/15 to-white/5 border border-white/20 overflow-hidden relative align-middle shadow-inner">
+                  <span className="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-md bg-[var(--primary-color)] shadow-[0_0_12px_rgba(188,234,62,0.6)]" />
+                </span>
+                <span>KS</span>
               </span>
             </h2>
           </div>

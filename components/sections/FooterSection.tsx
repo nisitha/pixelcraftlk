@@ -290,6 +290,16 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
             </a>
           </div>
         </div>
+
+        {/* Giant Watermark Brand Signature matching reference */}
+        <div
+          aria-hidden="true"
+          className="w-full select-none pointer-events-none text-center overflow-hidden pt-10 sm:pt-16 -mb-6 sm:-mb-10"
+        >
+          <span className="text-[64px] xs:text-[90px] sm:text-[140px] md:text-[190px] lg:text-[230px] font-black tracking-[-0.04em] text-white/[0.04] leading-none inline-block font-sans uppercase">
+            PixelCraft
+          </span>
+        </div>
       </div>
     </footer>
   );

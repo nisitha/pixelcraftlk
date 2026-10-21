@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "node scripts/deploy.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -24,6 +25,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "basic-ftp": "^6.2.3",
+    "dotenv": "^18.0.8",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",

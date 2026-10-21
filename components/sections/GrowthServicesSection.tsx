@@ -18,17 +18,18 @@ export interface GrowthServicesSectionProps {
 }
 
 const getServiceIcon = (icon: ServiceItem['icon']) => {
+  const iconClass = "w-6 h-6 text-[var(--primary-color)] group-hover:text-[#080d0d] transition-colors duration-300";
   switch (icon) {
     case 'strategy':
-      return <Compass className="w-6 h-6 text-[var(--primary-color)]" />;
+      return <Compass className={iconClass} />;
     case 'automation':
-      return <Cpu className="w-6 h-6 text-[var(--primary-color)]" />;
+      return <Cpu className={iconClass} />;
     case 'design':
-      return <Palette className="w-6 h-6 text-[var(--primary-color)]" />;
+      return <Palette className={iconClass} />;
     case 'cloud':
-      return <Activity className="w-6 h-6 text-[var(--primary-color)]" />;
+      return <Activity className={iconClass} />;
     default:
-      return <Compass className="w-6 h-6 text-[var(--primary-color)]" />;
+      return <Compass className={iconClass} />;
   }
 };
 
@@ -133,15 +134,15 @@ export const GrowthServicesSection: React.FC<GrowthServicesSectionProps> = ({ cl
           {growthServices.map((service, index) => (
             <div
               key={service.id}
-              className="service-card-item group relative rounded-3xl bg-[#111616] border border-white/10 hover:border-[var(--primary-color)]/30 hover:bg-[#151a1a] transition-all duration-400 p-7 sm:p-9 shadow-2xl flex flex-col justify-between"
+              className="service-card-item group relative rounded-3xl bg-[#111616] border border-white/10 hover:border-[var(--primary-color)]/60 hover:bg-[#161c1c] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(188,234,62,0.15)] transition-all duration-400 ease-out p-7 sm:p-9 shadow-2xl flex flex-col justify-between cursor-pointer"
             >
               <div>
                 {/* Upper Row: Icon Badge & Number Indicator */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/25 flex items-center justify-center group-hover:scale-105 group-hover:bg-[var(--primary-color)]/15 transition-all duration-300">
+                  <div className="w-14 h-14 rounded-2xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/25 flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--primary-color)] group-hover:border-[var(--primary-color)] transition-all duration-300 shadow-md">
                     {getServiceIcon(service.icon)}
                   </div>
-                  <span className="text-xs font-mono uppercase tracking-widest text-[#6f7781]">
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#6f7781] group-hover:text-[var(--primary-color)] transition-colors">
                     {`0${index + 1} //`}
                   </span>
                 </div>
@@ -179,8 +180,8 @@ export const GrowthServicesSection: React.FC<GrowthServicesSectionProps> = ({ cl
                   <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
 
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#899698] group-hover:bg-[var(--primary-color)] group-hover:text-[#080d0d] transition-all duration-300">
-                  <ArrowUpRight className="w-4 h-4" />
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#899698] group-hover:bg-[var(--primary-color)] group-hover:text-[#080d0d] group-hover:border-[var(--primary-color)] group-hover:scale-110 transition-all duration-300 shadow-md">
+                  <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </div>
             </div>

@@ -59,10 +59,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
       }
 
       if (sliderRef.current) {
-        gsap.from(sliderRef.current, {
-          y: 40,
+        const cards = sliderRef.current.querySelectorAll('.testimonial-card-item');
+        gsap.from(cards, {
+          y: 50,
           opacity: 0,
           duration: 0.9,
+          stagger: 0.15,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sliderRef.current,
@@ -142,9 +144,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
             {clientTestimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="w-full shrink-0 md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
+                className="testimonial-card-item w-full shrink-0 md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
               >
-                <div className="h-full rounded-3xl bg-[#111616] border border-white/10 hover:border-white/20 p-8 sm:p-9 flex flex-col justify-between shadow-2xl transition-all duration-300">
+                <div className="h-full rounded-3xl bg-[#111616] border border-white/10 hover:border-[var(--primary-color)]/30 hover:-translate-y-1.5 p-8 sm:p-9 flex flex-col justify-between shadow-2xl transition-all duration-300">
                   <div>
                     {/* Upper Row: 5 Stars + Quote Icon */}
                     <div className="flex items-center justify-between mb-6">

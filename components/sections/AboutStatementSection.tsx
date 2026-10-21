@@ -19,6 +19,59 @@ export interface AboutStatementSectionProps {
  * Section 3: Editorial About Statement (.section.about-v1)
  * High-contrast oversized editorial typography statement + "Learn More" CTA
  */
+const manifestoWords = [
+  { text: 'At' },
+  { text: 'PixelCraft,' },
+  { text: 'we' },
+  { text: 'believe' },
+  { text: 'digital' },
+  { text: 'engineering' },
+  { text: "isn't" },
+  { text: 'about' },
+  { text: "selling—it's" },
+  { text: 'about' },
+  { text: 'connecting.', isScript: true },
+  { text: "We're" },
+  { text: 'a' },
+  { text: 'digital' },
+  { text: 'engineering' },
+  { text: '&' },
+  { text: 'design' },
+  { text: 'studio' },
+  { text: 'built' },
+  { text: 'to' },
+  { text: 'help' },
+  { text: 'ambitious' },
+  { text: 'brands' },
+  { text: 'scale' },
+  { text: 'with' },
+  { text: 'purpose' },
+  { text: 'and' },
+  { text: 'technical' },
+  { text: 'precision.' },
+  { text: 'From' },
+  { text: 'crafting' },
+  { text: 'bulletproof' },
+  { text: 'web' },
+  { text: 'platforms' },
+  { text: 'to' },
+  { text: 'architecting' },
+  { text: 'automated' },
+  { text: 'lifecycle' },
+  { text: 'systems,' },
+  { text: 'we' },
+  { text: 'blend' },
+  { text: 'strategy' },
+  { text: 'and' },
+  { text: 'code' },
+  { text: 'to' },
+  { text: 'turn' },
+  { text: 'attention' },
+  { text: 'into' },
+  { text: 'compounding' },
+  { text: 'growth.' },
+];
+
 export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ className }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -32,35 +85,48 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-
+      // Word-by-word scroll scrubbing color fill effect (Owner Item 1)
       if (textRef.current) {
-        tl.from(textRef.current, {
-          y: 40,
-          opacity: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-        });
+        const words = textRef.current.querySelectorAll('.manifesto-word');
+        gsap.fromTo(
+          words,
+          {
+            opacity: 0.22,
+            color: '#475354',
+          },
+          {
+            opacity: 1,
+            color: (index, target) => {
+              return target.getAttribute('data-script') === 'true'
+                ? '#bcea3e'
+                : '#ffffff';
+            },
+            stagger: 0.08,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: textRef.current,
+              start: 'top 75%',
+              end: 'bottom 45%',
+              scrub: 0.8,
+            },
+          }
+        );
       }
 
+      // Bottom media cards entrance
       if (cardsRowRef.current) {
-        tl.from(
-          cardsRowRef.current.children,
-          {
-            y: 35,
-            opacity: 0,
-            duration: 0.85,
-            stagger: 0.15,
-            ease: 'power3.out',
+        gsap.from(cardsRowRef.current.children, {
+          y: 40,
+          opacity: 0,
+          duration: 0.85,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: cardsRowRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
           },
-          '-=0.45'
-        );
+        });
       }
     }, sectionRef);
 
@@ -105,18 +171,30 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
           <div className="lg:col-span-9">
             <h2
               ref={textRef}
-              className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[54px] xl:text-[60px] font-semibold tracking-[-0.035em] leading-[1.18] text-white"
+              className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[54px] xl:text-[60px] font-semibold tracking-[-0.035em] leading-[1.18] flex flex-wrap"
             >
-              <span>
-                At PixelCraft, we believe digital engineering isn&apos;t about selling—it&apos;s about{' '}
-                <span className="font-script font-normal text-[var(--primary-color)] text-[38px] sm:text-[50px] md:text-[62px] lg:text-[72px] italic leading-none align-baseline px-1">
-                  connecting.
-                </span>{' '}
-                We&apos;re a digital engineering &amp; design studio built to help ambitious brands scale with purpose and technical precision.{' '}
-              </span>
-              <span className="text-[#899698] font-normal">
-                From crafting bulletproof web platforms to architecting automated lifecycle systems, we blend strategy and code to turn attention into compounding growth.
-              </span>
+              {manifestoWords.map((item, idx) => {
+                if (item.isScript) {
+                  return (
+                    <span
+                      key={idx}
+                      data-script="true"
+                      className="manifesto-word inline-block font-script font-normal text-[38px] sm:text-[50px] md:text-[62px] lg:text-[72px] italic leading-none align-baseline px-1.5 mr-2 transition-colors will-change-[color,opacity]"
+                    >
+                      {item.text}
+                    </span>
+                  );
+                }
+
+                return (
+                  <span
+                    key={idx}
+                    className="manifesto-word inline-block mr-2.5 transition-colors will-change-[color,opacity]"
+                  >
+                    {item.text}
+                  </span>
+                );
+              })}
             </h2>
           </div>
         </div>

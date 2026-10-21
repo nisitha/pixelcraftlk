@@ -84,32 +84,32 @@ export const BlogInsightsSection: React.FC<BlogInsightsSectionProps> = ({ classN
       id="blog"
       aria-label="Market Insights and Strategy"
       className={cn(
-        'section blog-v1 relative bg-[#f4f4f6] text-[#080d0d] py-20 sm:py-28 lg:py-32 overflow-hidden',
+        'section blog-v1 relative bg-[#f4f4f6] text-[#080d0d] py-14 sm:py-24 lg:py-32 overflow-hidden',
         className
       )}
     >
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
+      <div className="max-w-[1290px] mx-auto px-4 sm:px-8 relative z-10">
         {/* Header Block */}
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-16">
           <div>
-            <h2 className="text-[36px] sm:text-[48px] md:text-[56px] font-bold tracking-tight leading-[1.08] text-[#080d0d]">
+            <h2 className="text-3xl sm:text-5xl md:text-[56px] font-bold tracking-tight leading-[1.08] text-[#080d0d]">
               Market Insights <br />
               and our Strategy
             </h2>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <p className="text-base sm:text-lg text-[#6f7781] font-normal leading-relaxed max-w-[420px]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <p className="text-sm sm:text-base md:text-lg text-[#6f7781] font-normal leading-relaxed max-w-[420px]">
               We fuel bold ideas, driving them forward with sharp strategy, design excellence, and scalable engineering.
             </p>
-            <Button variant="primary" size="default" href="/blog">
+            <Button variant="primary" size="default" href="/blog" className="w-full sm:w-auto justify-center">
               View Blogs
             </Button>
           </div>
         </div>
 
         {/* 3 Editorial Cards Grid (1:1 Scalient Parity) */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
           {blogInsights.map((post) => (
             <article
               key={post.id}

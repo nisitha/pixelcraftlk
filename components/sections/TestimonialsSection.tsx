@@ -131,8 +131,26 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
   const activeIndexRef = useRef(0);
   const isTransitioningRef = useRef(false);
   const pinTriggerRef = useRef<ScrollTrigger | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const total = clientTestimonials.length; // 5
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    touchStartX.current = null;
+  };
 
   const animateCards = useCallback((nextIndex: number, direction: 'forward' | 'backward' = 'forward') => {
     const currentIdx = activeIndexRef.current;
@@ -434,7 +452,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
         {/* 3D Stacked Card Deck */}
         <div
           ref={deckContainerRef}
-          className="relative w-full max-w-[740px] lg:max-w-[780px] mx-auto h-[380px] sm:h-[370px] md:h-[380px] flex items-center justify-center"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="relative w-full max-w-[740px] lg:max-w-[780px] mx-auto h-[420px] xs:h-[390px] sm:h-[370px] md:h-[380px] flex items-center justify-center touch-pan-y"
         >
           {clientTestimonials.map((testimonial, index) => {
             const theme = cardThemes[index % cardThemes.length];
@@ -466,45 +486,45 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
                   }
                 }}
                 className={cn(
-                  'testimonial-card absolute inset-0 rounded-[28px] sm:rounded-[32px] p-6 sm:p-8 md:p-9 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.22)] flex flex-col justify-between border cursor-pointer select-none transition-shadow hover:shadow-[0_28px_55px_-12px_rgba(0,0,0,0.32)]',
+                  'testimonial-card absolute inset-0 rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 md:p-9 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.22)] flex flex-col justify-between border cursor-pointer select-none transition-shadow hover:shadow-[0_28px_55px_-12px_rgba(0,0,0,0.32)]',
                   theme.textColor,
                   theme.borderClass
                 )}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="flex items-center justify-between mb-3 sm:mb-6">
                     <div
                       className={cn(
-                        'w-10 sm:w-11 h-10 sm:h-11 rounded-2xl flex items-center justify-center shadow-sm',
+                        'w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm',
                         theme.quoteBoxBg
                       )}
                     >
-                      <Quote className={cn('w-5 h-5', theme.quoteIconColor)} />
+                      <Quote className={cn('w-4 h-4 sm:w-5 sm:h-5', theme.quoteIconColor)} />
                     </div>
                     <div className="flex items-center gap-1">
                       {[...Array(testimonial.rating || 5)].map((_, i) => (
-                        <Star key={i} className={cn('w-4 h-4', theme.starColor)} />
+                        <Star key={i} className={cn('w-3.5 h-3.5 sm:w-4 sm:h-4', theme.starColor)} />
                       ))}
                     </div>
                   </div>
 
-                  <p className="text-base sm:text-lg md:text-[19px] lg:text-[20px] font-medium leading-relaxed sm:leading-snug tracking-tight">
+                  <p className="text-sm xs:text-base sm:text-lg md:text-[19px] lg:text-[20px] font-medium leading-relaxed sm:leading-snug tracking-tight">
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className={cn('flex items-center gap-3.5 pt-5 sm:pt-6 border-t', theme.metaBorderClass)}>
+                <div className={cn('flex items-center gap-3 pt-4 sm:pt-6 border-t', theme.metaBorderClass)}>
                   {testimonial.avatar ? (
                     <img
                       src={testimonial.avatar}
                       alt={testimonial.author}
-                      className="w-11 sm:w-12 h-11 sm:h-12 rounded-full object-cover ring-2 ring-white/20 shrink-0 select-none shadow"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover ring-2 ring-white/20 shrink-0 select-none shadow"
                       loading="lazy"
                     />
                   ) : (
                     <div
                       className={cn(
-                        'w-11 sm:w-12 h-11 sm:h-12 rounded-full font-bold text-sm sm:text-base flex items-center justify-center shadow shrink-0 select-none',
+                        'w-10 h-10 sm:w-12 sm:h-12 rounded-full font-bold text-xs sm:text-base flex items-center justify-center shadow shrink-0 select-none',
                         theme.avatarBg,
                         theme.avatarTextColor
                       )}
@@ -514,8 +534,8 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
                   )}
 
                   <div>
-                    <h3 className="text-sm sm:text-base font-bold tracking-tight">{testimonial.author}</h3>
-                    <p className={cn('text-xs sm:text-sm font-normal', theme.roleTextColor)}>
+                    <h3 className="text-xs sm:text-base font-bold tracking-tight">{testimonial.author}</h3>
+                    <p className={cn('text-[11px] sm:text-sm font-normal', theme.roleTextColor)}>
                       {testimonial.role} — {testimonial.company}
                     </p>
                   </div>

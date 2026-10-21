@@ -85,41 +85,41 @@ export const PricingPlansSection: React.FC<PricingPlansSectionProps> = ({ classN
       id="pricing"
       aria-label="Pricing and Plans"
       className={cn(
-        'section plan relative bg-[var(--dark-color)] text-white py-24 sm:py-32 lg:py-36 overflow-hidden border-t border-white/5',
+        'section plan relative bg-[var(--dark-color)] text-white py-16 sm:py-24 lg:py-36 overflow-hidden border-t border-white/5',
         className
       )}
     >
       {/* Giant Faint PRICING Watermark Text (1:1 Scalient Parity) */}
       <div
         aria-hidden="true"
-        className="absolute top-20 sm:top-24 left-1/2 -translate-x-1/2 select-none pointer-events-none text-white/[0.03] font-black text-[140px] sm:text-[220px] md:text-[280px] tracking-widest uppercase leading-none z-0"
+        className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 select-none pointer-events-none text-white/[0.03] font-black text-[72px] sm:text-[180px] md:text-[240px] tracking-widest uppercase leading-none z-0"
       >
         PRICING
       </div>
 
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
+      <div className="max-w-[1290px] mx-auto px-4 sm:px-8 relative z-10">
         {/* Section Header */}
-        <div ref={headerRef} className="flex flex-col items-center text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111616] border border-[var(--primary-color)]/50 mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
+        <div ref={headerRef} className="flex flex-col items-center text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#111616] border border-[var(--primary-color)]/50 mb-3 sm:mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
             <span>Our Plans</span>
           </div>
 
-          <h2 className="text-[36px] sm:text-[48px] md:text-[56px] font-semibold tracking-[-0.035em] leading-[1.08] text-white">
+          <h2 className="text-3xl sm:text-5xl md:text-[56px] font-semibold tracking-tight leading-[1.08] text-white">
             Pricing and Plans <br className="hidden sm:inline" />
             Tailored to any Team
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-[#899698] font-normal leading-relaxed max-w-[620px]">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-[#899698] font-normal leading-relaxed max-w-[620px] px-2">
             We offer flexible, custom-fit plans designed to meet the unique needs and budget of your team.
           </p>
 
           {/* Interactive Billing Toggle */}
-          <div className="mt-8 inline-flex items-center p-1.5 rounded-full bg-[#111616] border border-white/10 shadow-lg relative select-none">
+          <div className="mt-6 sm:mt-8 inline-flex items-center p-1 sm:p-1.5 rounded-full bg-[#111616] border border-white/10 shadow-lg relative select-none">
             <button
               type="button"
               onClick={() => setBillingCycle('monthly')}
               className={cn(
-                'relative z-10 px-6 py-2 rounded-full text-sm font-bold transition-all duration-300',
+                'relative z-10 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300',
                 billingCycle === 'monthly'
                   ? 'bg-[var(--primary-color)] text-[#080d0d] shadow-md'
                   : 'text-[#899698] hover:text-white'
@@ -132,7 +132,7 @@ export const PricingPlansSection: React.FC<PricingPlansSectionProps> = ({ classN
               type="button"
               onClick={() => setBillingCycle('yearly')}
               className={cn(
-                'relative z-10 inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all duration-300',
+                'relative z-10 inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300',
                 billingCycle === 'yearly'
                   ? 'bg-[var(--primary-color)] text-[#080d0d] shadow-md'
                   : 'text-[#899698] hover:text-white'
@@ -141,7 +141,7 @@ export const PricingPlansSection: React.FC<PricingPlansSectionProps> = ({ classN
               <span>Yearly</span>
               <span
                 className={cn(
-                  'text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full transition-colors',
+                  'text-[9px] sm:text-[10px] font-extrabold uppercase px-1.5 sm:px-2 py-0.5 rounded-full transition-colors',
                   billingCycle === 'yearly'
                     ? 'bg-[#080d0d] text-[var(--primary-color)]'
                     : 'bg-[var(--primary-color)] text-[#080d0d]'
@@ -162,7 +162,7 @@ export const PricingPlansSection: React.FC<PricingPlansSectionProps> = ({ classN
               <div
                 key={plan.id}
                 className={cn(
-                  'pricing-card-item relative rounded-3xl p-8 sm:p-9 flex flex-col justify-between transition-all duration-400 shadow-2xl overflow-hidden',
+                  'pricing-card-item relative rounded-3xl p-6 sm:p-8 lg:p-9 flex flex-col justify-between transition-all duration-400 shadow-2xl overflow-hidden',
                   plan.isPopular
                     ? 'bg-[#151a1a] border border-[var(--primary-color)]/50 shadow-[0_0_50px_rgba(188,234,62,0.14)] -translate-y-2 lg:-translate-y-3'
                     : 'bg-[#111616] border border-white/10 hover:border-white/20'

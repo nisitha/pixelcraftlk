@@ -30,11 +30,14 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isOpen]);
 
@@ -62,13 +65,13 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
       )}
     >
       {/* Mobile Header Bar */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-white/[0.08] shrink-0">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] shrink-0">
         <PixelCraftLogo onClick={handleClose} />
         <button
           type="button"
           onClick={handleClose}
           aria-label="Close mobile menu"
-          className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:text-[var(--primary-color)] transition-colors cursor-pointer"
+          className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:text-[var(--primary-color)] transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>

@@ -24,8 +24,8 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
   const cards = (
     <>
       {/* CARD 1: Grayscale Collaboration Photo + Floating Badge */}
-      <div className="hero-card-item relative shrink-0 w-[270px] sm:w-[290px] md:w-[310px] overflow-visible group">
-        <div className="relative aspect-[4/5] w-full rounded-[28px] overflow-hidden shadow-2xl bg-[#111616] border border-white/10">
+      <div className="hero-card-item relative shrink-0 w-[230px] sm:w-[270px] md:w-[310px] overflow-visible group snap-center">
+        <div className="relative aspect-[4/5] w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-2xl bg-[#111616] border border-white/10">
           <Image
             src="/hero/team-collab.jpg"
             alt="PixelCraft Studios team collaborating on digital products"
@@ -39,53 +39,53 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
         </div>
 
         {/* Floating Pill Badge: Positioned overlapping photo top right with vertical float bobbing animation */}
-        <div className="absolute top-4 -right-3 sm:-right-5 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-sm font-medium shadow-xl select-none animate-float-bobbing">
-          <span className="w-2.5 h-2.5 rounded-[2px] bg-[#080d0d] shrink-0" />
-          <span className="text-xs sm:text-sm font-medium text-[#080d0d] tracking-tight whitespace-nowrap">
+        <div className="absolute top-3 -right-2 sm:-right-4 z-20 inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white text-black shadow-xl select-none animate-float-bobbing">
+          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-[#080d0d] shrink-0" />
+          <span className="text-xs sm:text-sm font-semibold text-[#080d0d] tracking-tight whitespace-nowrap">
             Marketing Team
           </span>
         </div>
       </div>
 
       {/* CARD 2: Partner & Client Stats Card (Solid White) */}
-      <div className="hero-card-item shrink-0 w-[170px] sm:w-[190px] h-[258px] rounded-[28px] bg-white text-[#080d0d] p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-transform duration-500 hover:-translate-y-1">
-        <div className="text-4xl sm:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center justify-center">
+      <div className="hero-card-item shrink-0 w-[150px] sm:w-[170px] md:w-[190px] h-[230px] sm:h-[258px] rounded-[24px] sm:rounded-[28px] bg-white text-[#080d0d] p-5 sm:p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-transform duration-500 hover:-translate-y-1 snap-center">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center justify-center">
           <SlotCounter value="200+" itemHeight={48} delay={600} />
         </div>
-        <p className="mt-3 text-xs sm:text-sm font-medium text-[#5f696a] leading-snug max-w-[130px]">
+        <p className="mt-2.5 sm:mt-3 text-[11px] sm:text-xs md:text-sm font-medium text-[#5f696a] leading-snug max-w-[130px]">
           Our Esteemed Clients and Partners
         </p>
       </div>
 
       {/* CARD 3: Dark Card with 3D Lock / "Trusted & Transparent Growth" */}
-      <div className="hero-card-item shrink-0 w-[180px] sm:w-[200px] h-[220px] rounded-[28px] bg-[#111616] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
-        <h3 className="text-white text-base sm:text-lg font-semibold leading-snug max-w-[140px]">
+      <div className="hero-card-item shrink-0 w-[160px] sm:w-[180px] md:w-[200px] h-[200px] sm:h-[220px] rounded-[24px] sm:rounded-[28px] bg-[#111616] border border-white/10 p-4 sm:p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1 snap-center">
+        <h3 className="text-white text-sm sm:text-base md:text-lg font-semibold leading-snug max-w-[140px]">
           Trusted &amp; Transparent Growth
         </h3>
         {/* 3D Glossy Lock Badge */}
-        <div className="self-end w-12 h-12 rounded-2xl bg-gradient-to-br from-[#c8f53c] to-[#9ed322] shadow-[0_4px_18px_rgba(200,245,60,0.35)] flex items-center justify-center text-[#080d0d]">
-          <Lock className="w-6 h-6 stroke-[2.3]" />
+        <div className="self-end w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#c8f53c] to-[#9ed322] shadow-[0_4px_18px_rgba(200,245,60,0.35)] flex items-center justify-center text-[#080d0d]">
+          <Lock className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.3]" />
         </div>
       </div>
 
       {/* CARD 4: Dark Card with Lime Bar Chart Graphic */}
-      <div className="hero-card-item shrink-0 w-[180px] sm:w-[205px] h-[258px] rounded-[28px] bg-[#111616] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
+      <div className="hero-card-item shrink-0 w-[160px] sm:w-[180px] md:w-[205px] h-[230px] sm:h-[258px] rounded-[24px] sm:rounded-[28px] bg-[#111616] border border-white/10 p-4 sm:p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1 snap-center">
         <div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs uppercase tracking-wider text-[#899698] font-medium">
+            <span className="text-[10px] sm:text-xs uppercase tracking-wider text-[#899698] font-medium">
               Conversion
             </span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--primary-color)] bg-[var(--primary-color)]/15 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> +148%
+            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-[var(--primary-color)] bg-[var(--primary-color)]/15 px-1.5 sm:px-2 py-0.5 rounded-full">
+              <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> +148%
             </span>
           </div>
-          <h3 className="text-white text-base sm:text-lg font-semibold leading-snug">
+          <h3 className="text-white text-sm sm:text-base md:text-lg font-semibold leading-snug">
             Performance Velocity
           </h3>
         </div>
 
         {/* Dynamic Lime Bar Chart Graphic */}
-        <div className="w-full h-[100px] relative mt-2 flex items-end justify-between gap-2 px-1">
+        <div className="w-full h-[85px] sm:h-[100px] relative mt-2 flex items-end justify-between gap-1.5 sm:gap-2 px-1">
           <div className="w-full h-[35%] rounded-t-md bg-[#c8f53c]/35 transition-all hover:bg-[#c8f53c]" />
           <div className="w-full h-[55%] rounded-t-md bg-[#c8f53c]/50 transition-all hover:bg-[#c8f53c]" />
           <div className="w-full h-[75%] rounded-t-md bg-[#c8f53c]/70 transition-all hover:bg-[#c8f53c]" />
@@ -96,9 +96,9 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
       </div>
 
       {/* CARD 5: Solid White Card with "20+ Global Enterprise drives innovation", country badges ("Mexico", "Australia"), and half-globe graphic */}
-      <div className="hero-card-item shrink-0 w-[240px] sm:w-[270px] h-[338px] rounded-[28px] bg-white text-[#080d0d] p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-transform duration-500 hover:-translate-y-1">
+      <div className="hero-card-item shrink-0 w-[220px] sm:w-[250px] md:w-[270px] h-[300px] sm:h-[338px] rounded-[24px] sm:rounded-[28px] bg-white text-[#080d0d] p-5 sm:p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-transform duration-500 hover:-translate-y-1 snap-center">
         <div className="relative z-10">
-          <div className="text-4xl sm:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center">
+          <div className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center">
             <SlotCounter value="20+" itemHeight={48} delay={700} />
           </div>
           <p className="mt-2 text-xs sm:text-sm font-medium text-[#5f696a] leading-snug">
@@ -106,18 +106,18 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
           </p>
 
           {/* Country Badges: Mexico, Australia */}
-          <div className="flex flex-wrap gap-2 mt-4">
-            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-xs font-semibold tracking-wide">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+            <span className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-[11px] sm:text-xs font-semibold tracking-wide">
               Mexico
             </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-xs font-semibold tracking-wide">
+            <span className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-[11px] sm:text-xs font-semibold tracking-wide">
               Australia
             </span>
           </div>
         </div>
 
         {/* 3D Wireframe Half-Globe Graphic at Bottom */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[220px] h-[130px] pointer-events-none opacity-85">
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[200px] sm:w-[220px] h-[120px] sm:h-[130px] pointer-events-none opacity-85">
           <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
             <defs>
               <radialGradient id="globeGrad" cx="50%" cy="30%" r="70%">
@@ -147,7 +147,7 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
   );
 
   return (
-    <div className={cn('w-full relative mt-5 sm:mt-7 lg:mt-7', className)}>
+    <div className={cn('w-full relative mt-5 sm:mt-7 lg:mt-7 max-w-full overflow-hidden', className)}>
       {/* Desktop Layout: Stepped horizontal row aligned at bottom */}
       <div
         ref={cardsRef}
@@ -157,7 +157,7 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
       </div>
 
       {/* Tablet & Mobile Layout: Smooth horizontal scrollable carousel track */}
-      <div className="flex lg:hidden overflow-x-auto scrollbar-none items-end gap-4 px-4 sm:px-8 pb-4 pt-2 -mx-4 sm:-mx-8 snap-x snap-mandatory">
+      <div className="flex lg:hidden overflow-x-auto scrollbar-none items-end gap-3.5 px-4 sm:px-6 pb-4 pt-3 w-full max-w-full snap-x snap-mandatory touch-pan-x">
         {cards}
       </div>
     </div>

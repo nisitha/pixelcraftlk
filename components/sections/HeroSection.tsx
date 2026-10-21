@@ -141,12 +141,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Display Headline */}
             <h1
               ref={headlineRef}
-              className="inner-title mt-3 sm:mt-4 text-[38px] sm:text-[54px] md:text-[66px] lg:text-[76px] xl:text-[80px] font-semibold tracking-[-0.038em] leading-[1.04] text-white text-center max-w-[840px]"
+              className="inner-title mt-3 sm:mt-4 text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold tracking-tight leading-[1.08] text-white text-center max-w-[840px]"
             >
               Fueling the Next{' '}
               <br className="hidden sm:inline" />
               Generation of{' '}
-              <span className="font-script font-normal text-[var(--primary-color)] text-[48px] sm:text-[66px] md:text-[80px] lg:text-[92px] xl:text-[98px] italic leading-none align-baseline">
+              <span className="font-script font-normal text-[var(--primary-color)] text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl italic leading-none align-baseline inline-block">
                 Brands
               </span>
             </h1>
@@ -154,7 +154,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Sub-headline Paragraph */}
             <p
               ref={paragraphRef}
-              className="inner-details mt-2.5 sm:mt-3 text-base sm:text-lg md:text-[18px] text-[#899698] font-normal leading-relaxed text-center max-w-[620px]"
+              className="inner-details mt-2.5 sm:mt-3 text-sm sm:text-base md:text-lg text-[#899698] font-normal leading-relaxed text-center max-w-[620px] px-2"
             >
               Powering bold ideas with strategy, creativity, and scalable digital engineering.
             </p>
@@ -162,14 +162,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Action CTA Button Cluster */}
             <div
               ref={buttonsRef}
-              className="inner-button-wrap flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-4 sm:mt-5"
+              className="inner-button-wrap flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-5 w-full max-w-xs sm:max-w-none"
             >
               {/* Primary CTA with signature vertical text roll and arrow */}
               <Button
                 variant="primary"
                 size="default"
                 href="/contact"
-                className="shadow-[0_8px_24px_rgba(188,234,62,0.22)]"
+                className="w-full sm:w-auto justify-center shadow-[0_8px_24px_rgba(188,234,62,0.22)]"
               >
                 Get Started
               </Button>
@@ -179,7 +179,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
                 type="button"
                 onClick={() => setIsVideoModalOpen(true)}
                 aria-label="Watch video demonstration"
-                className="watch-button group relative overflow-hidden inline-flex items-center gap-2.5 h-[52px] px-6 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-medium text-base transition-all duration-300 active:scale-[0.98] select-none"
+                className="watch-button group relative overflow-hidden inline-flex items-center justify-center gap-2.5 h-[48px] sm:h-[52px] px-6 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-medium text-sm sm:text-base transition-all duration-300 active:scale-[0.98] select-none w-full sm:w-auto"
               >
                 {/* Blue Accent Slide Hover Background */}
                 <span

@@ -99,12 +99,12 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
     >
       <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
         {/* Main Footer Row: Newsletter on Left, 4 Columns on Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-16 border-b border-white/10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 pb-12 sm:pb-16 border-b border-white/10 items-start">
           {/* Left Column: Newsletter capture */}
           <div ref={newsletterRef} className="lg:col-span-5 flex flex-col justify-between">
             <div>
-              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.12] mb-6">
-                Sign up for our <br />
+              <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.12] mb-4 sm:mb-6">
+                Sign up for our <br className="hidden sm:inline" />
                 newsletter today.
               </h2>
 
@@ -114,7 +114,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
                   <span>Thank you for subscribing! Check your inbox for confirmation.</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex items-center rounded-full bg-[#111616] border border-white/10 p-1.5 max-w-md shadow-lg focus-within:border-[var(--primary-color)] transition-colors">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center rounded-2xl sm:rounded-full bg-[#111616] border border-white/10 p-1.5 max-w-md shadow-lg focus-within:border-[var(--primary-color)] transition-colors gap-2 sm:gap-0">
                   <input
                     type="email"
                     value={email}
@@ -122,11 +122,11 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
                     placeholder="Your email"
                     required
                     aria-label="Email address for newsletter"
-                    className="w-full bg-transparent px-4 text-sm text-white placeholder-[#6f7781] outline-none"
+                    className="w-full bg-transparent px-4 py-2 sm:py-0 text-sm text-white placeholder-[#6f7781] outline-none"
                   />
                   <button
                     type="submit"
-                    className="shrink-0 h-[44px] px-6 rounded-full bg-[var(--primary-color)] hover:brightness-105 active:scale-95 text-[#080d0d] text-sm font-bold transition-all flex items-center justify-center cursor-pointer shadow-md"
+                    className="shrink-0 h-[44px] px-6 rounded-xl sm:rounded-full bg-[var(--primary-color)] hover:brightness-105 active:scale-95 text-[#080d0d] text-sm font-bold transition-all flex items-center justify-center cursor-pointer shadow-md w-full sm:w-auto"
                   >
                     Subscribe
                   </button>
@@ -140,7 +140,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
           </div>
 
           {/* Right Columns: 4 Nav Columns (Main, Inner, Utility, Social) */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
             {/* Column 1: Main Pages */}
             <div>
               <span className="text-sm font-semibold text-white block mb-4">
@@ -239,9 +239,9 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ className }) => {
         <div
           ref={watermarkRef}
           aria-hidden="true"
-          className="w-full select-none pointer-events-none text-center overflow-hidden pt-10 sm:pt-16 -mb-6 sm:-mb-10"
+          className="w-full select-none pointer-events-none text-center overflow-hidden pt-8 sm:pt-16 -mb-4 sm:-mb-10 max-w-full"
         >
-          <span className="text-[64px] xs:text-[90px] sm:text-[140px] md:text-[190px] lg:text-[230px] font-black tracking-[-0.04em] text-white/[0.04] leading-none inline-block font-sans uppercase">
+          <span className="text-[44px] xs:text-[68px] sm:text-[120px] md:text-[180px] lg:text-[230px] font-black tracking-[-0.04em] text-white/[0.04] leading-none inline-block font-sans uppercase">
             PixelCraft
           </span>
         </div>

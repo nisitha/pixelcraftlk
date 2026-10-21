@@ -144,15 +144,15 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
       id="about-statement"
       aria-label="About Statement"
       className={cn(
-        'section about-v1 relative bg-[#f4f4f6] text-[#080d0d] py-24 sm:py-32 lg:py-36 overflow-hidden',
+        'section about-v1 relative bg-[#f4f4f6] text-[#080d0d] py-16 sm:py-24 lg:py-36 overflow-hidden',
         className
       )}
     >
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
+      <div className="max-w-[1290px] mx-auto px-4 sm:px-8 relative z-10">
         {/* Top Split: Label on left, Two-Tone Editorial Manifesto on right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16 sm:mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-start mb-12 sm:mb-16 lg:mb-20">
           <div className="lg:col-span-3">
-            <span className="text-sm sm:text-base font-semibold text-[#6f7781] tracking-tight block">
+            <span className="text-xs sm:text-sm md:text-base font-semibold uppercase tracking-wider text-[#6f7781] block">
               About PixelCraft
             </span>
           </div>
@@ -160,7 +160,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
           <div className="lg:col-span-9">
             <h2
               ref={textRef}
-              className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[54px] xl:text-[60px] font-semibold tracking-[-0.038em] leading-[1.16] flex flex-wrap text-[#080d0d]"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-[54px] xl:text-[60px] font-semibold tracking-tight leading-[1.2] sm:leading-[1.16] flex flex-wrap text-[#080d0d]"
             >
               {manifestoWords.map((item, idx) => {
                 if (item.isScript) {
@@ -168,7 +168,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
                     <span
                       key={idx}
                       data-script="true"
-                      className="manifesto-word inline-block font-script font-normal text-[38px] sm:text-[50px] md:text-[62px] lg:text-[72px] italic leading-none align-baseline px-1.5 mr-2 transition-colors will-change-[color,opacity]"
+                      className="manifesto-word inline-block font-script font-normal text-3xl sm:text-5xl md:text-6xl lg:text-[72px] italic leading-none align-baseline px-1 sm:px-1.5 mr-1.5 sm:mr-2 transition-colors will-change-[color,opacity]"
                     >
                       {item.text}
                     </span>
@@ -178,7 +178,7 @@ export const AboutStatementSection: React.FC<AboutStatementSectionProps> = ({ cl
                 return (
                   <span
                     key={idx}
-                    className="manifesto-word inline-block mr-2.5 transition-colors will-change-[color,opacity]"
+                    className="manifesto-word inline-block mr-1.5 sm:mr-2.5 transition-colors will-change-[color,opacity]"
                   >
                     {item.text}
                   </span>

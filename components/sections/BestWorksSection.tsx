@@ -384,9 +384,9 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
         if (headlineBoxRef.current && headerRef.current) {
           gsap.fromTo(
             headlineBoxRef.current,
-            { width: 50 },
+            { width: 34 },
             {
-              width: 110,
+              width: 64,
               ease: 'none',
               scrollTrigger: {
                 trigger: headerRef.current,
@@ -409,11 +409,11 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
       id="works"
       aria-label="Our Best Works"
       className={cn(
-        'section work relative bg-[#f4f4f6] text-[#080d0d] py-14 sm:py-20 lg:py-24 overflow-hidden',
+        'section work relative bg-[#f4f4f6] text-[#080d0d] py-12 sm:py-20 lg:py-24 overflow-hidden',
         className
       )}
     >
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10 flex flex-col justify-between">
+      <div className="max-w-[1290px] mx-auto px-4 sm:px-8 relative z-10 flex flex-col justify-between">
         {/* Section Header with Expanding Pill */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
           <div>
@@ -422,18 +422,18 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
               <span>Selected Portfolio</span>
             </div>
 
-            <h2 className="text-[38px] sm:text-[54px] md:text-[72px] lg:text-[84px] font-black tracking-tight leading-[0.96] text-[#080d0d] uppercase flex flex-col select-none">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-[84px] font-black tracking-tight leading-[0.96] text-[#080d0d] uppercase flex flex-col select-none">
               <span>OUR BEST</span>
-              <span className="inline-flex items-center gap-2 sm:gap-3 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 sm:gap-3 flex-wrap">
                 <span>WOR</span>
                 <span
                   ref={headlineBoxRef}
-                  className="inline-flex items-center justify-center h-[28px] sm:h-[40px] md:h-[52px] lg:h-[60px] rounded-full bg-[#080d0d] border border-black/10 overflow-hidden relative align-middle shadow-md will-change-[width]"
-                  style={{ width: '50px' }}
+                  className="inline-flex items-center justify-center h-[26px] sm:h-[38px] md:h-[50px] lg:h-[60px] rounded-full bg-[#080d0d] border border-black/10 overflow-hidden relative align-middle shadow-md will-change-[width]"
+                  style={{ width: '36px' }}
                 >
                   <span
                     ref={accentSquareRef}
-                    className="w-3 sm:w-4 sm:h-4 rounded-xs bg-[var(--primary-color)] shadow-[0_0_12px_rgba(188,234,62,0.85)] will-change-transform"
+                    className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-xs bg-[var(--primary-color)] shadow-[0_0_12px_rgba(188,234,62,0.85)] will-change-transform"
                   />
                 </span>
                 <span>KS</span>
@@ -447,10 +447,11 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
         </div>
 
         {/* Sticky Card Stacking Deck Container */}
-        {/* On desktop: Pinned absolute stack (height ~540px) | On mobile: Vertical flex flow */}
+        {/* Sticky Card Stacking Deck Container */}
+        {/* On desktop: Pinned absolute stack (height ~550px) | On mobile: Vertical flex flow with auto height */}
         <div
           ref={deckRef}
-          className="relative w-full h-[500px] sm:h-[520px] lg:h-[550px] max-lg:flex max-lg:flex-col max-lg:gap-8"
+          className="relative w-full lg:h-[550px] max-lg:flex max-lg:flex-col max-lg:gap-8 max-lg:h-auto"
         >
           {featuredProjects.map((project, index) => {
             const zIndexStyle = { zIndex: (index + 1) * 10 };
@@ -460,7 +461,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                 key={project.id}
                 style={zIndexStyle}
                 className={cn(
-                  'stacked-card group relative w-full h-full lg:absolute lg:inset-0 will-change-transform'
+                  'stacked-card group relative w-full lg:h-full lg:absolute lg:inset-0 will-change-transform'
                 )}
               >
                 <Link
@@ -468,7 +469,7 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                   className="block h-full rounded-[24px] sm:rounded-[28px] bg-white border border-black/10 hover:border-black/20 transition-all duration-500 overflow-hidden shadow-[0_16px_45px_rgba(0,0,0,0.12)] flex flex-col justify-between"
                 >
                   {/* Card Visual Canvas (Fills remaining height) */}
-                  <div className="relative w-full flex-1 min-h-[300px] overflow-hidden bg-[#0c0f12] flex items-center justify-center p-5 sm:p-8">
+                  <div className="relative w-full flex-1 min-h-[260px] sm:min-h-[300px] overflow-hidden bg-[#0c0f12] flex items-center justify-center p-4 sm:p-8">
                     {/* Background Ambient Project Gradient */}
                     <div
                       aria-hidden="true"
@@ -490,26 +491,26 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                     />
 
                     {/* Category Pill Badge on Top-Left */}
-                    <div className="absolute top-5 left-5 z-20 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#080d0d]/80 backdrop-blur-md border border-white/15 text-xs font-semibold text-white/90 shadow-lg">
-                      <span className="w-2 h-2 rounded-full bg-[var(--primary-color)] shadow-[0_0_8px_rgba(188,234,62,0.8)]" />
+                    <div className="absolute top-4 sm:top-5 left-4 sm:left-5 z-20 inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#080d0d]/80 backdrop-blur-md border border-white/15 text-[11px] sm:text-xs font-semibold text-white/90 shadow-lg">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--primary-color)] shadow-[0_0_8px_rgba(188,234,62,0.8)]" />
                       <span>{project.category}</span>
                     </div>
 
                     {/* Circular Arrow Button on Top-Right */}
-                    <div className="absolute top-5 right-5 z-20 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-white flex items-center justify-center shadow-xl transition-all duration-300 group-hover:bg-[var(--primary-color)] group-hover:text-[#080d0d] group-hover:border-[var(--primary-color)] group-hover:scale-105">
-                      <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <div className="absolute top-4 sm:top-5 right-4 sm:right-5 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-white flex items-center justify-center shadow-xl transition-all duration-300 group-hover:bg-[var(--primary-color)] group-hover:text-[#080d0d] group-hover:border-[var(--primary-color)] group-hover:scale-105">
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </div>
 
                     {/* Inner Dashboard Mockup with scale(1.03) on Hover */}
-                    <div className="relative z-10 w-full max-w-[560px] transition-transform duration-500 ease-out group-hover:scale-[1.03] will-change-transform">
+                    <div className="relative z-10 w-full max-w-[560px] transition-transform duration-500 ease-out group-hover:scale-[1.03] will-change-transform pt-8 sm:pt-0">
                       {getProjectMockup(project.id)}
                     </div>
                   </div>
 
                   {/* Bottom Meta Strip */}
-                  <div className="shrink-0 h-[76px] sm:h-[84px] px-6 sm:px-8 flex items-center justify-between bg-white border-t border-black/5">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4">
-                      <h3 className="text-xl sm:text-2xl font-bold text-[#080d0d] tracking-tight group-hover:text-[var(--primary-color)] transition-colors duration-300">
+                  <div className="shrink-0 h-auto py-4 sm:h-[84px] px-5 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 bg-white border-t border-black/5">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                      <h3 className="text-lg sm:text-2xl font-bold text-[#080d0d] tracking-tight group-hover:text-[var(--primary-color)] transition-colors duration-300">
                         {project.title}
                       </h3>
                       <span className="text-xs sm:text-sm text-[#6f7781] font-medium">
@@ -517,11 +518,11 @@ export const BestWorksSection: React.FC<BestWorksSectionProps> = ({ className })
                       </span>
                     </div>
 
-                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold text-[#080d0d] group-hover:text-[var(--primary-color)] transition-colors">
+                    <div className="inline-flex items-center gap-1.5 text-xs sm:text-base font-semibold text-[#080d0d] group-hover:text-[var(--primary-color)] transition-colors self-start sm:self-auto">
                       <span className="underline underline-offset-4 decoration-black/20 group-hover:decoration-[var(--primary-color)]">
                         View Project
                       </span>
-                      <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                      <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </div>
                   </div>
                 </Link>

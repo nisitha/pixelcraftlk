@@ -55,6 +55,7 @@ export const viewport: Viewport = {
   themeColor: "#080d0d",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -68,10 +69,10 @@ export default function RootLayout({
       className={`${inter.variable} ${italianno.variable} dark`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col bg-[var(--dark-color)] text-white font-sans antialiased overflow-x-hidden pt-[80px]">
+      <body className="min-h-screen flex flex-col bg-[var(--dark-color)] text-white font-sans antialiased overflow-x-hidden w-full max-w-full pt-[72px] sm:pt-[80px]">
         <SmoothScrollProvider>
           <Navbar />
-          <div className="flex-1 flex flex-col">{children}</div>
+          <div className="flex-1 flex flex-col w-full max-w-full overflow-x-hidden">{children}</div>
           <FooterSection />
         </SmoothScrollProvider>
       </body>

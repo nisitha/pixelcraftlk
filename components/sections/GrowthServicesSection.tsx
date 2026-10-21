@@ -100,51 +100,51 @@ export const GrowthServicesSection: React.FC<GrowthServicesSectionProps> = ({ cl
       id="services"
       aria-label="Solutions Tailored for Your Growth"
       className={cn(
-        'section growth relative bg-[var(--dark-color)] text-white py-24 sm:py-32 lg:py-36 overflow-hidden border-t border-white/5',
+        'section growth relative bg-[var(--dark-color)] text-white py-14 sm:py-24 lg:py-36 overflow-hidden border-t border-white/5',
         className
       )}
     >
       {/* Ambient background soft glow */}
       <div
         aria-hidden="true"
-        className="absolute top-1/3 right-0 w-[500px] h-[400px] rounded-full blur-[150px] pointer-events-none opacity-20"
+        className="absolute top-1/3 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[400px] rounded-full blur-[120px] pointer-events-none opacity-20"
         style={{
           background: 'radial-gradient(circle, rgba(188, 234, 62, 0.15) 0%, transparent 70%)',
         }}
       />
 
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
+      <div className="max-w-[1290px] mx-auto px-4 sm:px-8 relative z-10">
         {/* Header Block */}
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-16">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-3 sm:mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
               <span>Full-Spectrum Capabilities</span>
             </div>
 
-            <h2 className="text-[36px] sm:text-[48px] md:text-[56px] font-semibold tracking-[-0.035em] leading-[1.08] text-white max-w-[680px]">
+            <h2 className="text-3xl sm:text-5xl md:text-[56px] font-semibold tracking-tight leading-[1.08] text-white max-w-[680px]">
               Solutions Tailored for Your{' '}
-              <span className="font-script font-normal text-[var(--primary-color)] text-[46px] sm:text-[62px] md:text-[72px] italic">
+              <span className="font-script font-normal text-[var(--primary-color)] text-4xl sm:text-6xl md:text-[72px] italic inline-block">
                 growth
               </span>
             </h2>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <p className="text-base sm:text-lg text-[#899698] font-normal leading-relaxed max-w-[420px]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <p className="text-sm sm:text-base md:text-lg text-[#899698] font-normal leading-relaxed max-w-[420px]">
               We fuel bold ideas, driving them forward with sharp strategy, design excellence, and scalable engineering.
             </p>
-            <Button variant="primary" size="default" href="/contact">
+            <Button variant="primary" size="default" href="/contact" className="w-full sm:w-auto justify-center">
               Get Started
             </Button>
           </div>
         </div>
 
         {/* 4 Feature Service Cards (4-Column Layout matching Scalient) */}
-        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {growthServices.map((service, index) => (
             <div
               key={service.id}
-              className="service-card-item group relative rounded-3xl bg-[#111616] text-white border border-white/10 hover:bg-white hover:text-[#080d0d] hover:border-white hover:-translate-y-3 hover:shadow-[0_25px_60px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out p-6 sm:p-7 shadow-2xl flex flex-col justify-between cursor-pointer min-h-[380px]"
+              className="service-card-item group relative rounded-3xl bg-[#111616] text-white border border-white/10 hover:bg-white hover:text-[#080d0d] hover:border-white hover:-translate-y-2 sm:hover:-translate-y-3 hover:shadow-[0_25px_60px_rgba(0,0,0,0.7)] transition-all duration-500 ease-out p-5 sm:p-7 shadow-2xl flex flex-col justify-between cursor-pointer min-h-[320px] sm:min-h-[380px]"
             >
               <div>
                 {/* Upper Row: Icon Badge & Number Indicator */}

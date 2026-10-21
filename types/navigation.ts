@@ -16,7 +16,7 @@ export interface NavigationConfig {
   readonly footerColumns: readonly MegaDropdownColumn[];
   readonly legalLinks: readonly NavItem[];
   readonly socialLinks: readonly {
-    readonly platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'dribbble';
+    readonly platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'dribbble' | 'whatsapp';
     readonly href: string;
     readonly label: string;
   }[];

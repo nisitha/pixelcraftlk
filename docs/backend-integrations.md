@@ -21,7 +21,7 @@ To activate real production email delivery to the PixelCraft team:
    RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
 
    # Recipient email inbox for lead intake
-   CONTACT_RECIPIENT_EMAIL="hello@pixelcraftlk.com"
+   CONTACT_RECIPIENT_EMAIL="pixelcraftstudioslk@gmail.com"
    ```
 2. Verify domain sending records in Resend (SPF, DKIM, DMARC) for `@pixelcraftlk.com`.
 3. Update the `from` address in `app/api/contact/route.ts` from `onboarding@resend.dev` to `inquiries@pixelcraftlk.com` once the custom domain is verified.

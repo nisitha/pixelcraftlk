@@ -97,9 +97,10 @@ export const navigationData: NavigationConfig = {
   ],
 
   socialLinks: [
-    { platform: 'facebook', href: 'https://facebook.com', label: 'Facebook' },
+    { platform: 'facebook', href: 'https://web.facebook.com/PixelCraftStudiosLK/', label: 'Facebook' },
+    { platform: 'instagram', href: 'https://www.instagram.com/pixelcraftstudiolk/', label: 'Instagram' },
+    { platform: 'whatsapp', href: 'https://wa.me/94787676576', label: 'WhatsApp' },
     { platform: 'twitter', href: 'https://x.com', label: 'X (Twitter)' },
-    { platform: 'instagram', href: 'https://instagram.com', label: 'Instagram' },
     { platform: 'linkedin', href: 'https://linkedin.com', label: 'LinkedIn' },
     { platform: 'dribbble', href: 'https://dribbble.com', label: 'Dribbble' },
   ],

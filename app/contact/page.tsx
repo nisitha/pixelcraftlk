@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Section, Heading, Text, Badge, Card } from '@/components/ui';
-import { Mail, Phone, MapPin, Clock, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, ShieldCheck, Sparkles, ArrowUpRight } from 'lucide-react';
 import { siteConfig } from '@/data/site';
 import { ContactForm } from '@/components/forms/ContactForm';
 
@@ -50,14 +50,32 @@ export default function ContactPage() {
                   </div>
                 </Card>
 
-                <Card variant="default" className="flex items-center gap-4 py-4 px-6 hover:border-white/20 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)] shrink-0">
-                    <Phone className="w-5 h-5" />
+                <Card variant="default" className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 px-6 hover:border-white/20 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)] shrink-0">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-[var(--light-gray)] block font-mono">BUSINESS WHATSAPP & PHONE</span>
+                      <a
+                        href={siteConfig.whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-semibold text-white hover:text-[var(--primary-color)] transition-colors"
+                      >
+                        {siteConfig.phone}
+                      </a>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-xs text-[var(--light-gray)] block font-mono">GLOBAL TELEPHONY</span>
-                    <span className="text-sm font-semibold text-white">{siteConfig.phone}</span>
-                  </div>
+                  <a
+                    href={siteConfig.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[var(--primary-color)] text-[#080d0d] text-xs font-bold hover:brightness-105 active:scale-95 transition-all shrink-0 shadow-sm"
+                  >
+                    <span>Chat on WhatsApp</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
                 </Card>
 
                 <Card variant="default" className="flex items-center gap-4 py-4 px-6 hover:border-white/20 transition-colors">
@@ -69,6 +87,28 @@ export default function ContactPage() {
                     <span className="text-sm font-semibold text-white">{siteConfig.address}</span>
                   </div>
                 </Card>
+              </div>
+
+              {/* Official Social Media Channels */}
+              <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-[#899698]">
+                <span>Official Channels:</span>
+                <a
+                  href={siteConfig.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-[var(--primary-color)] transition-colors font-medium underline underline-offset-4"
+                >
+                  Facebook
+                </a>
+                <span>•</span>
+                <a
+                  href={siteConfig.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-[var(--primary-color)] transition-colors font-medium underline underline-offset-4"
+                >
+                  Instagram
+                </a>
               </div>
 
               {/* Guarantees Box */}

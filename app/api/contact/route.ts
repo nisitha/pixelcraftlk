@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // 3. Email service dispatch or simulation
     const resendApiKey = process.env.RESEND_API_KEY;
-    const recipientEmail = process.env.CONTACT_RECIPIENT_EMAIL || 'hello@pixelcraftlk.com';
+    const recipientEmail = process.env.CONTACT_RECIPIENT_EMAIL || 'pixelcraftstudioslk@gmail.com';
 
     if (resendApiKey) {
       // If RESEND_API_KEY is configured in environment, dispatch actual email via Resend API
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Failed to deliver message via email provider. Please contact us directly at hello@pixelcraftlk.com',
+            error: 'Failed to deliver message via email provider. Please contact us directly at pixelcraftstudioslk@gmail.com',
           },
           { status: 502 }
         );
@@ -84,6 +84,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Documented fallback: Log to server telemetry when external API key is not yet provisioned
       console.log('--- [PIXELCRAFT CONTACT SUBMISSION] ---');
+      console.log(`To: ${recipientEmail}`);
       console.log(`From: ${name} <${email}>`);
       console.log(`Company: ${company || 'N/A'}`);
       console.log(`Service: ${service || 'General'}`);

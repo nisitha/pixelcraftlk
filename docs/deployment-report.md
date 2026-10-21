@@ -101,7 +101,7 @@ Add the following environment variables in your hosting dashboard (**Vercel Sett
 |---|---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | **Yes** | `https://pixelcraftlk.com` | Primary canonical URL for metadata, sitemap & OpenGraph |
 | `RESEND_API_KEY` | **Yes** | `re_xxxxxxxxxxxxxxxxxxxxxxxx` | Obtain from [Resend API Keys](https://resend.com/api-keys) for contact form email delivery |
-| `CONTACT_RECIPIENT_EMAIL` | **Yes** | `hello@pixelcraftlk.com` | Destination inbox for inbound prospective client leads |
+| `CONTACT_RECIPIENT_EMAIL` | **Yes** | `pixelcraftstudioslk@gmail.com` | Destination inbox for inbound prospective client leads |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | *Optional* | `pk_live_xxxxxxxxxxxxxxxxxxxxxxxx` | For live retainer checkout payments |
 | `STRIPE_SECRET_KEY` | *Optional* | `sk_live_xxxxxxxxxxxxxxxxxxxxxxxx` | Server-side Stripe API processing key |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | *Optional* | `G-XXXXXXXXXX` | Google Analytics 4 (only configure if consent banner is active) |

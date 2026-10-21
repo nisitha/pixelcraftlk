@@ -43,9 +43,9 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             <Card variant="highlight" className="w-full mt-4">
               <h4 className="text-lg font-semibold text-white mb-2">How to Apply</h4>
               <p className="text-sm text-[var(--light-gray)] mb-6">
-                Send your portfolio, GitHub, or previous case studies to careers@pixelcraftlk.com.
+                Send your portfolio, GitHub, or previous case studies to pixelcraftstudioslk@gmail.com.
               </p>
-              <Button variant="primary" href="mailto:careers@pixelcraftlk.com">
+              <Button variant="primary" href="mailto:pixelcraftstudioslk@gmail.com">
                 Email Application
               </Button>
             </Card>

@@ -1,15 +1,20 @@
 /**
- * PixelCraft Studios — Automated Namecheap cPanel FTP/FTPS Deployment Script
+ * PixelCraft Studios — Smart Incremental / Differential FTP/FTPS Deployment Script
  *
- * This script:
+ * Features:
  * 1. Loads FTP credentials from .env.local (or .env).
  * 2. Compiles Next.js static export via `npm run build` (generates ./out).
- * 3. Connects securely to Namecheap cPanel via FTP/FTPS.
- * 4. Syncs ./out directly into /public_html (or custom FTP_REMOTE_ROOT).
+ * 3. Scans ./out and computes MD5 hash for each file.
+ * 4. Compares against local cache (.deploy-cache.json) to find new/modified files.
+ * 5. If no changes detected: skips connection and exits immediately.
+ * 6. If changes detected: connects via secure FTPS and uploads ONLY changed files.
+ * 7. Automatically creates remote subdirectories as needed.
+ * 8. Updates .deploy-cache.json upon successful transmission.
  */
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { execSync } = require('child_process');
 const ftp = require('basic-ftp');
 const dotenv = require('dotenv');
@@ -18,6 +23,8 @@ const dotenv = require('dotenv');
 const projectRoot = path.resolve(__dirname, '..');
 const envLocalPath = path.join(projectRoot, '.env.local');
 const envPath = path.join(projectRoot, '.env');
+const cachePath = path.join(projectRoot, '.deploy-cache.json');
+const outDir = path.join(projectRoot, 'out');
 
 if (fs.existsSync(envLocalPath)) {
   dotenv.config({ path: envLocalPath });
@@ -36,12 +43,45 @@ const FTP_SECURE = process.env.FTP_SECURE === 'false'
   : (process.env.FTP_SECURE === 'implicit' ? 'implicit' : true);
 const FTP_REJECT_UNAUTHORIZED = process.env.FTP_REJECT_UNAUTHORIZED === 'true';
 
-// Check for CLI flags
+// CLI flags
 const skipBuild = process.argv.includes('--skip-build') || process.env.SKIP_BUILD === 'true';
+const forceUpload = process.argv.includes('--force') || process.env.FORCE_UPLOAD === 'true';
+
+// Helper: Compute MD5 hash of file
+function computeFileHash(filePath) {
+  const buffer = fs.readFileSync(filePath);
+  return crypto.createHash('md5').update(buffer).digest('hex');
+}
+
+// Helper: Format file size for human-readable output
+function formatBytes(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+// Helper: Recursively scan directory for all files
+function scanDirectory(dir, baseDir = dir) {
+  let results = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results = results.concat(scanDirectory(fullPath, baseDir));
+    } else if (entry.isFile()) {
+      // Standardize relative path with forward slashes
+      const relPath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+      results.push({ fullPath, relPath });
+    }
+  }
+
+  return results;
+}
 
 async function deploy() {
   console.log('\n======================================================');
-  console.log('🚀 PixelCraft Studios — cPanel FTP Deployment');
+  console.log('🚀 PixelCraft Studios — Differential FTP Deployment');
   console.log('======================================================\n');
 
   // 3. Validate credentials
@@ -58,11 +98,9 @@ async function deploy() {
     process.exit(1);
   }
 
-  // 4. Build the application
-  const outDir = path.join(projectRoot, 'out');
-
+  // 4. Build the application (unless skipped)
   if (skipBuild) {
-    console.log('⏩ Skipping build step (--skip-build detected)...');
+    console.log('⏩ Skipping build step (--skip-build detected)...\n');
   } else {
     console.log('📦 Step 1/3: Building static production export (npm run build)...');
     try {
@@ -88,24 +126,72 @@ async function deploy() {
   console.log(`📋 Output Directory Verified: ${outDir}`);
   console.log(`📄 .htaccess Present: ${hasHtaccess ? '✅ Yes' : '⚠️ Warning: Missing .htaccess'}\n`);
 
-  // 5. Connect and Upload via basic-ftp
+  // 5. Differential Analysis (Hash Tracking)
+  console.log('🔍 Step 2/3: Analyzing file changes (MD5 delta sync)...');
+  const allScannedFiles = scanDirectory(outDir);
+  const currentHashMap = {};
+  const currentFilesList = [];
+
+  for (const item of allScannedFiles) {
+    const hash = computeFileHash(item.fullPath);
+    const size = fs.statSync(item.fullPath).size;
+    currentHashMap[item.relPath] = hash;
+    currentFilesList.push({
+      fullPath: item.fullPath,
+      relPath: item.relPath,
+      hash,
+      size,
+    });
+  }
+
+  // Load previous cache
+  let previousCache = {};
+  if (fs.existsSync(cachePath) && !forceUpload) {
+    try {
+      const raw = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+      previousCache = raw.files || raw;
+    } catch (e) {
+      console.warn('⚠️ Could not read previous .deploy-cache.json, performing full upload.');
+      previousCache = {};
+    }
+  }
+
+  // Build upload queue
+  const uploadQueue = [];
+  let unchangedCount = 0;
+
+  for (const file of currentFilesList) {
+    const prevHash = previousCache[file.relPath];
+    if (forceUpload || !prevHash) {
+      uploadQueue.push({ ...file, status: 'new' });
+    } else if (prevHash !== file.hash) {
+      uploadQueue.push({ ...file, status: 'modified' });
+    } else {
+      unchangedCount++;
+    }
+  }
+
+  // If nothing changed, exit cleanly without connecting
+  if (uploadQueue.length === 0) {
+    console.log('\n✨ Everything is up to date! Zero files to upload.');
+    console.log(`📁 All ${unchangedCount} files match remote state.\n`);
+    process.exit(0);
+  }
+
+  console.log(`📊 Delta Summary:`);
+  console.log(`   - Total Files in Build: ${currentFilesList.length}`);
+  console.log(`   - Unchanged (Skipped) : ${unchangedCount}`);
+  console.log(`   - To Upload           : ${uploadQueue.length} (${uploadQueue.filter(f => f.status === 'new').length} new, ${uploadQueue.filter(f => f.status === 'modified').length} modified)\n`);
+
+  // Sort queue by relative path to group files in the same directory together
+  uploadQueue.sort((a, b) => a.relPath.localeCompare(b.relPath));
+
+  // 6. Connect and Differential Upload via basic-ftp
   const client = new ftp.Client(60000); // 60s timeout
   client.ftp.verbose = process.env.FTP_VERBOSE === 'true';
 
-  let uploadedFilesCount = 0;
-  let lastLoggedFile = '';
-
-  client.trackProgress(info => {
-    if (info.type === 'upload' && info.name && info.name !== lastLoggedFile) {
-      lastLoggedFile = info.name;
-      uploadedFilesCount++;
-      const mb = (info.bytesOverall / (1024 * 1024)).toFixed(2);
-      process.stdout.write(`\r  ⬆️  [${uploadedFilesCount}] Uploading: ${info.name.padEnd(40).slice(0, 40)} (${mb} MB synced)`);
-    }
-  });
-
   try {
-    console.log(`📡 Step 2/3: Connecting to ${FTP_HOST}:${FTP_PORT} (User: ${FTP_USER})...`);
+    console.log(`📡 Step 3/3: Connecting to ${FTP_HOST}:${FTP_PORT} (User: ${FTP_USER})...`);
     console.log(`🔒 Security Mode: ${FTP_SECURE === true ? 'FTPS (Explicit TLS)' : FTP_SECURE === 'implicit' ? 'FTPS (Implicit TLS)' : 'Plain FTP'}`);
 
     await client.access({
@@ -119,25 +205,56 @@ async function deploy() {
       },
     });
 
-    console.log('✅ FTP Connection established successfully.\n');
+    console.log('✅ Connected securely to FTP server.\n');
+    console.log(`🚀 Uploading ${uploadQueue.length} modified/new files into "${FTP_REMOTE_ROOT}"...\n`);
 
-    console.log(`📂 Step 3/3: Syncing "./out" -> "${FTP_REMOTE_ROOT}" on remote server...`);
-    await client.ensureDir(FTP_REMOTE_ROOT);
-    await client.uploadFromDir(outDir, FTP_REMOTE_ROOT);
+    let currentRemoteDir = null;
+    let uploadedCount = 0;
 
-    console.log('\n\n======================================================');
+    for (let i = 0; i < uploadQueue.length; i++) {
+      const item = uploadQueue[i];
+      const remoteFilePath = path.posix.join(FTP_REMOTE_ROOT, item.relPath);
+      const remoteDir = path.posix.dirname(remoteFilePath);
+      const fileName = path.posix.basename(remoteFilePath);
+
+      // Only change directory when moving to a new folder
+      if (currentRemoteDir !== remoteDir) {
+        await client.ensureDir(remoteDir);
+        currentRemoteDir = remoteDir;
+      }
+
+      const statusTag = item.status === 'new' ? '✨ NEW' : '🔄 MODIFIED';
+      process.stdout.write(`  [${i + 1}/${uploadQueue.length}] ${statusTag}: ${item.relPath} (${formatBytes(item.size)})... `);
+
+      await client.uploadFrom(item.fullPath, fileName);
+      uploadedCount++;
+      process.stdout.write(`✅\n`);
+    }
+
+    // 7. Update .deploy-cache.json upon 100% successful upload
+    const updatedCache = {
+      lastDeployed: new Date().toISOString(),
+      remoteRoot: FTP_REMOTE_ROOT,
+      totalFiles: currentFilesList.length,
+      files: currentHashMap,
+    };
+
+    fs.writeFileSync(cachePath, JSON.stringify(updatedCache, null, 2), 'utf8');
+
+    console.log('\n======================================================');
     console.log('🎉 Deployment Successful!');
     console.log(`🌐 Target: ${FTP_HOST}${FTP_REMOTE_ROOT}`);
-    console.log(`📦 Synced: ${uploadedFilesCount} files successfully to cPanel.`);
+    console.log(`📦 Summary: Uploaded ${uploadedCount} modified/new files. ${unchangedCount} files were unchanged and skipped.`);
+    console.log(`💾 Cache: Updated local .deploy-cache.json`);
     console.log('======================================================\n');
   } catch (err) {
-    console.error('\n\n❌ Deployment Failed with error:');
+    console.error('\n❌ Deployment Failed with error:');
     console.error(err.message || err);
     console.error('\n💡 Troubleshooting Tips:');
     console.error(' 1. Verify FTP_HOST, FTP_USER, and FTP_PASSWORD in .env.local.');
     console.error(' 2. If using Namecheap cPanel, ensure FTP account has access to /public_html.');
     console.error(' 3. Try setting FTP_SECURE="false" in .env.local if explicit FTPS is not supported on your port.');
-    console.error(' 4. If using cPanel IP/hostname, check firewall whitelist in cPanel.\n');
+    console.error(' 4. Cache was not updated so no changes were lost; re-run when connection is restored.\n');
     process.exit(1);
   } finally {
     client.close();

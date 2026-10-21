@@ -141,7 +141,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Display Headline */}
             <h1
               ref={headlineRef}
-              className="inner-title mt-4 sm:mt-5 text-[38px] sm:text-[54px] md:text-[66px] lg:text-[76px] xl:text-[80px] font-semibold tracking-[-0.038em] leading-[1.04] text-white text-center max-w-[840px]"
+              className="inner-title mt-3 sm:mt-4 text-[38px] sm:text-[54px] md:text-[66px] lg:text-[76px] xl:text-[80px] font-semibold tracking-[-0.038em] leading-[1.04] text-white text-center max-w-[840px]"
             >
               Fueling the Next{' '}
               <br className="hidden sm:inline" />
@@ -154,7 +154,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Sub-headline Paragraph */}
             <p
               ref={paragraphRef}
-              className="inner-details mt-3 sm:mt-3.5 text-base sm:text-lg md:text-[18px] text-[#899698] font-normal leading-relaxed text-center max-w-[620px]"
+              className="inner-details mt-2.5 sm:mt-3 text-base sm:text-lg md:text-[18px] text-[#899698] font-normal leading-relaxed text-center max-w-[620px]"
             >
               Powering bold ideas with strategy, creativity, and scalable digital engineering.
             </p>
@@ -162,7 +162,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
             {/* Action CTA Button Cluster */}
             <div
               ref={buttonsRef}
-              className="inner-button-wrap flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-5 sm:mt-6"
+              className="inner-button-wrap flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 mt-4 sm:mt-5"
             >
               {/* Primary CTA with signature vertical text roll and arrow */}
               <Button

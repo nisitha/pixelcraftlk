@@ -249,6 +249,21 @@ body {
   backface-visibility: hidden;
 }
 
+/* Floating Up and Down Bobbing Animation for Marketing Team Badge */
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-bobbing {
+  animation: floatUpDown 3s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* Infinite Marquee Animation */
 @keyframes marquee {
   0% {
@@ -314,7 +329,8 @@ body {
   }
   .animate-marquee,
   .animate-pulse-gentle,
-  .animate-spin-slow {
+  .animate-spin-slow,
+  .animate-float-bobbing {
     animation: none !important;
     transform: none !important;
   }

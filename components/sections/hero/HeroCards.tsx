@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { SlotCounter } from './SlotCounter';
-import { ShieldCheck, TrendingUp } from 'lucide-react';
+import { Lock, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface HeroCardsProps {
@@ -13,19 +13,19 @@ export interface HeroCardsProps {
 
 /**
  * 5 Hero Showcase Cards
- * Recreates the observable shelf of visual cards:
- * 1. Grayscale team collaboration photo with floating "Strategy & Design" pill
- * 2. Solid white stats counter card ("250+ Visionary Clients & Partners")
- * 3. Glassmorphic trust card ("Trusted & Transparent Engineering")
- * 4. Glassmorphic growth chart card ("High-Performance Growth" + sparkline)
- * 5. Solid white global enterprise card ("20+ Global Enterprise Deployments" + country pills + world map)
+ * 1:1 Parity with https://scalient.webflow.io/
+ * 1. Grayscale team photo with floating "■ Marketing Team" badge (vertical float animation)
+ * 2. Solid white stats counter card ("200+ Our Esteemed Clients and Partners")
+ * 3. Dark card with 3D glossy lock ("Trusted & Transparent Growth")
+ * 4. Dark card with lime bar chart graphic ("Performance Velocity")
+ * 5. Solid white global enterprise card ("20+ Global Enterprise drives innovation", "Mexico", "Australia", half-globe)
  */
 export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => {
   const cards = (
     <>
       {/* CARD 1: Grayscale Collaboration Photo + Floating Badge */}
-      <div className="hero-card-item relative shrink-0 w-[270px] sm:w-[290px] md:w-[310px] rounded-2xl overflow-hidden shadow-2xl bg-[#111616] border border-white/10 group">
-        <div className="relative aspect-[4/5] w-full overflow-hidden">
+      <div className="hero-card-item relative shrink-0 w-[270px] sm:w-[290px] md:w-[310px] overflow-visible group">
+        <div className="relative aspect-[4/5] w-full rounded-[28px] overflow-hidden shadow-2xl bg-[#111616] border border-white/10">
           <Image
             src="/hero/team-collab.jpg"
             alt="PixelCraft Studios team collaborating on digital products"
@@ -38,37 +38,38 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
         </div>
 
-        {/* Floating Pill Badge: Positioned overlapping photo top right */}
-        <div className="absolute top-4 right-4 z-10 flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-white text-[#080d0d] shadow-[0_12px_24px_rgba(0,0,0,0.5)] border border-black/5 animate-pulse-gentle">
-          <span className="w-2.5 h-2.5 rounded-sm bg-[#080d0d]" />
-          <span className="text-xs font-semibold tracking-tight text-[#080d0d]">
-            Strategy &amp; Design
+        {/* Floating Pill Badge: Positioned overlapping photo top right with vertical float bobbing animation */}
+        <div className="absolute top-4 -right-3 sm:-right-5 z-20 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-sm font-medium shadow-xl select-none animate-float-bobbing">
+          <span className="w-2.5 h-2.5 rounded-[2px] bg-[#080d0d] shrink-0" />
+          <span className="text-xs sm:text-sm font-medium text-[#080d0d] tracking-tight whitespace-nowrap">
+            Marketing Team
           </span>
         </div>
       </div>
 
       {/* CARD 2: Partner & Client Stats Card (Solid White) */}
-      <div className="hero-card-item shrink-0 w-[170px] sm:w-[190px] h-[258px] rounded-2xl bg-white text-[#080d0d] p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-transform duration-500 hover:-translate-y-1">
+      <div className="hero-card-item shrink-0 w-[170px] sm:w-[190px] h-[258px] rounded-[28px] bg-white text-[#080d0d] p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-transform duration-500 hover:-translate-y-1">
         <div className="text-4xl sm:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center justify-center">
-          <SlotCounter value="250+" itemHeight={48} delay={600} />
+          <SlotCounter value="200+" itemHeight={48} delay={600} />
         </div>
         <p className="mt-3 text-xs sm:text-sm font-medium text-[#5f696a] leading-snug max-w-[130px]">
-          Visionary Clients &amp; Global Partners
+          Our Esteemed Clients and Partners
         </p>
       </div>
 
-      {/* CARD 3: Glassmorphism Trust Card */}
-      <div className="hero-card-item shrink-0 w-[180px] sm:w-[200px] h-[211px] rounded-2xl bg-white/[0.08] backdrop-blur-[25px] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
-        <h3 className="text-white text-base sm:text-lg font-semibold leading-snug max-w-[130px]">
-          Trusted &amp; Transparent Engineering
+      {/* CARD 3: Dark Card with 3D Lock / "Trusted & Transparent Growth" */}
+      <div className="hero-card-item shrink-0 w-[180px] sm:w-[200px] h-[220px] rounded-[28px] bg-[#111616] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
+        <h3 className="text-white text-base sm:text-lg font-semibold leading-snug max-w-[140px]">
+          Trusted &amp; Transparent Growth
         </h3>
-        <div className="self-end p-2.5 rounded-xl bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/30 text-[var(--primary-color)]">
-          <ShieldCheck className="w-6 h-6" />
+        {/* 3D Glossy Lock Badge */}
+        <div className="self-end w-12 h-12 rounded-2xl bg-gradient-to-br from-[#c8f53c] to-[#9ed322] shadow-[0_4px_18px_rgba(200,245,60,0.35)] flex items-center justify-center text-[#080d0d]">
+          <Lock className="w-6 h-6 stroke-[2.3]" />
         </div>
       </div>
 
-      {/* CARD 4: Glassmorphic Performance Chart Card */}
-      <div className="hero-card-item shrink-0 w-[180px] sm:w-[205px] h-[258px] rounded-2xl bg-white/[0.08] backdrop-blur-[25px] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
+      {/* CARD 4: Dark Card with Lime Bar Chart Graphic */}
+      <div className="hero-card-item shrink-0 w-[180px] sm:w-[205px] h-[258px] rounded-[28px] bg-[#111616] border border-white/10 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-500 hover:-translate-y-1">
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs uppercase tracking-wider text-[#899698] font-medium">
@@ -83,88 +84,70 @@ export const HeroCards: React.FC<HeroCardsProps> = ({ className, cardsRef }) => 
           </h3>
         </div>
 
-        {/* Dynamic Sparkline SVG Graph */}
-        <div className="w-full h-[110px] relative mt-2">
-          <svg
-            className="w-full h-full overflow-visible"
-            viewBox="0 0 160 80"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#bcea3e" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#bcea3e" stopOpacity="0.0" />
-              </linearGradient>
-            </defs>
-
-            {/* Background Grid Lines */}
-            <line x1="0" y1="20" x2="160" y2="20" stroke="white" strokeOpacity="0.05" strokeDasharray="3 3" />
-            <line x1="0" y1="45" x2="160" y2="45" stroke="white" strokeOpacity="0.05" strokeDasharray="3 3" />
-            <line x1="0" y1="70" x2="160" y2="70" stroke="white" strokeOpacity="0.05" strokeDasharray="3 3" />
-
-            {/* Area Fill */}
-            <path
-              d="M0 65 Q 25 55, 45 60 T 90 35 T 130 30 T 160 12 L 160 80 L 0 80 Z"
-              fill="url(#chartGlow)"
-            />
-
-            {/* Neon Sparkline Stroke */}
-            <path
-              d="M0 65 Q 25 55, 45 60 T 90 35 T 130 30 T 160 12"
-              stroke="#bcea3e"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            {/* End Point Glow Indicator */}
-            <circle cx="160" cy="12" r="4" fill="#bcea3e" />
-            <circle cx="160" cy="12" r="7" fill="#bcea3e" fillOpacity="0.3" />
-          </svg>
+        {/* Dynamic Lime Bar Chart Graphic */}
+        <div className="w-full h-[100px] relative mt-2 flex items-end justify-between gap-2 px-1">
+          <div className="w-full h-[35%] rounded-t-md bg-[#c8f53c]/35 transition-all hover:bg-[#c8f53c]" />
+          <div className="w-full h-[55%] rounded-t-md bg-[#c8f53c]/50 transition-all hover:bg-[#c8f53c]" />
+          <div className="w-full h-[75%] rounded-t-md bg-[#c8f53c]/70 transition-all hover:bg-[#c8f53c]" />
+          <div className="w-full h-[45%] rounded-t-md bg-[#c8f53c]/45 transition-all hover:bg-[#c8f53c]" />
+          <div className="w-full h-[85%] rounded-t-md bg-[#c8f53c]/85 transition-all hover:bg-[#c8f53c]" />
+          <div className="w-full h-[100%] rounded-t-md bg-[#c8f53c] shadow-[0_0_15px_rgba(200,245,60,0.5)]" />
         </div>
       </div>
 
-      {/* CARD 5: Global Enterprise Card (Solid White) */}
-      <div className="hero-card-item shrink-0 w-[240px] sm:w-[270px] h-[338px] rounded-3xl bg-white text-[#080d0d] p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-transform duration-500 hover:-translate-y-1">
+      {/* CARD 5: Solid White Card with "20+ Global Enterprise drives innovation", country badges ("Mexico", "Australia"), and half-globe graphic */}
+      <div className="hero-card-item shrink-0 w-[240px] sm:w-[270px] h-[338px] rounded-[28px] bg-white text-[#080d0d] p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-transform duration-500 hover:-translate-y-1">
         <div className="relative z-10">
           <div className="text-4xl sm:text-5xl font-bold tracking-tight text-[#080d0d] flex items-center">
             <SlotCounter value="20+" itemHeight={48} delay={700} />
           </div>
           <p className="mt-2 text-xs sm:text-sm font-medium text-[#5f696a] leading-snug">
-            Global Enterprise drives digital innovation
+            Global Enterprise drives innovation
           </p>
 
-          {/* Region Pills */}
+          {/* Country Badges: Mexico, Australia */}
           <div className="flex flex-wrap gap-2 mt-4">
-            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[var(--primary-color)] text-xs font-semibold tracking-wide">
-              London
+            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-xs font-semibold tracking-wide">
+              Mexico
             </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[var(--primary-color)] text-xs font-semibold tracking-wide">
-              New York
-            </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[var(--primary-color)] text-xs font-semibold tracking-wide">
-              Singapore
+            <span className="px-3.5 py-1.5 rounded-full bg-[#080d0d] text-[#c8f53c] text-xs font-semibold tracking-wide">
+              Australia
             </span>
           </div>
         </div>
 
-        {/* Faint Dotted World Map Graphic at Bottom */}
-        <div className="absolute -bottom-2 -right-4 w-[240px] h-[130px] pointer-events-none opacity-40">
-          <Image
-            src="/hero/world-map.svg"
-            alt="Global deployment map"
-            width={240}
-            height={130}
-            className="w-full h-full object-contain"
-          />
+        {/* 3D Wireframe Half-Globe Graphic at Bottom */}
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[220px] h-[130px] pointer-events-none opacity-85">
+          <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <defs>
+              <radialGradient id="globeGrad" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" stopColor="#1e262c" />
+                <stop offset="60%" stopColor="#0c1214" />
+                <stop offset="100%" stopColor="#040607" />
+              </radialGradient>
+              <linearGradient id="globeRim" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#c8f53c" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#c8f53c" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            {/* Hemisphere Sphere Body */}
+            <path d="M10 110 C 10 40, 190 40, 190 110 Z" fill="url(#globeGrad)" stroke="url(#globeRim)" strokeWidth="1.5" />
+            {/* Latitude Ellipses */}
+            <ellipse cx="100" cy="90" rx="80" ry="18" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 3" />
+            <ellipse cx="100" cy="70" rx="65" ry="14" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3 3" />
+            <ellipse cx="100" cy="52" rx="42" ry="9" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="3 3" />
+            {/* Longitude Arcs */}
+            <path d="M100 45 C 100 45, 60 70, 60 110" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+            <path d="M100 45 C 100 45, 140 70, 140 110" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+            <path d="M100 45 L 100 110" stroke="#c8f53c" strokeWidth="1.5" strokeOpacity="0.6" />
+          </svg>
         </div>
       </div>
     </>
   );
 
   return (
-    <div className={cn('w-full relative mt-8 sm:mt-10 lg:mt-11', className)}>
+    <div className={cn('w-full relative mt-5 sm:mt-7 lg:mt-7', className)}>
       {/* Desktop Layout: Stepped horizontal row aligned at bottom */}
       <div
         ref={cardsRef}

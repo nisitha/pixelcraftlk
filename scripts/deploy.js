@@ -1,15 +1,14 @@
 /**
- * PixelCraft Studios — Smart Incremental / Differential FTP/FTPS Deployment Script
+ * PixelCraft Studios — Resilient Differential FTP/FTPS Deployment Script
  *
- * Features:
- * 1. Loads FTP credentials from .env.local (or .env).
- * 2. Compiles Next.js static export via `npm run build` (generates ./out).
- * 3. Scans ./out and computes MD5 hash for each file.
- * 4. Compares against local cache (.deploy-cache.json) to find new/modified files.
- * 5. If no changes detected: skips connection and exits immediately.
- * 6. If changes detected: connects via secure FTPS and uploads ONLY changed files.
- * 7. Automatically creates remote subdirectories as needed.
- * 8. Updates .deploy-cache.json upon successful transmission.
+ * Resilience Architecture:
+ * 1. Differential Analysis (MD5 hashing): Only uploads changed or new files.
+ * 2. Per-File Incremental Cache Persistence: Immediately flushes .deploy-cache.json
+ *    after each successfully uploaded file. If interrupted, progress is never lost.
+ * 3. Auto-Reconnect & Retry on Socket Error: Automatically recovers from ECONNRESET,
+ *    socket timeouts, or control channel drops with exponential backoff & reconnection (up to 3 retries).
+ * 4. Path Normalization: Automatically standardizes all Windows backslashes (\) to standard
+ *    FTP forward slashes (/) across local cache and remote directory navigation.
  */
 
 const fs = require('fs');
@@ -79,9 +78,28 @@ function scanDirectory(dir, baseDir = dir) {
   return results;
 }
 
+// Helper: Connect to FTP server
+async function connectFTP() {
+  const client = new ftp.Client(60000); // 60s socket timeout
+  client.ftp.verbose = process.env.FTP_VERBOSE === 'true';
+
+  await client.access({
+    host: FTP_HOST,
+    user: FTP_USER,
+    password: FTP_PASSWORD,
+    port: FTP_PORT,
+    secure: FTP_SECURE,
+    secureOptions: {
+      rejectUnauthorized: FTP_REJECT_UNAUTHORIZED,
+    },
+  });
+
+  return client;
+}
+
 async function deploy() {
   console.log('\n======================================================');
-  console.log('🚀 PixelCraft Studios — Differential FTP Deployment');
+  console.log('🚀 PixelCraft Studios — Resilient FTP Deployment');
   console.log('======================================================\n');
 
   // 3. Validate credentials
@@ -144,15 +162,36 @@ async function deploy() {
     });
   }
 
-  // Load previous cache
-  let previousCache = {};
+  // Load previous cache and normalize keys to forward slashes
+  const previousCache = {};
   if (fs.existsSync(cachePath) && !forceUpload) {
     try {
       const raw = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-      previousCache = raw.files || raw;
+      const rawFiles = raw.files || raw;
+      for (const [key, val] of Object.entries(rawFiles)) {
+        if (typeof val === 'string') {
+          previousCache[key.replace(/\\/g, '/')] = val;
+        }
+      }
     } catch (e) {
-      console.warn('⚠️ Could not read previous .deploy-cache.json, performing full upload.');
-      previousCache = {};
+      console.warn('⚠️ Could not parse previous .deploy-cache.json, performing fresh upload.');
+    }
+  }
+
+  // In-memory working cache initialized with known files
+  const workingCache = { ...previousCache };
+
+  function flushCache() {
+    const payload = {
+      lastDeployed: new Date().toISOString(),
+      remoteRoot: FTP_REMOTE_ROOT,
+      totalFiles: currentFilesList.length,
+      files: workingCache,
+    };
+    try {
+      fs.writeFileSync(cachePath, JSON.stringify(payload, null, 2), 'utf8');
+    } catch (err) {
+      console.warn(`⚠️ Warning: Cache write error: ${err.message}`);
     }
   }
 
@@ -175,6 +214,8 @@ async function deploy() {
   if (uploadQueue.length === 0) {
     console.log('\n✨ Everything is up to date! Zero files to upload.');
     console.log(`📁 All ${unchangedCount} files match remote state.\n`);
+    // Ensure cache has normalized keys
+    flushCache();
     process.exit(0);
   }
 
@@ -186,78 +227,103 @@ async function deploy() {
   // Sort queue by relative path to group files in the same directory together
   uploadQueue.sort((a, b) => a.relPath.localeCompare(b.relPath));
 
-  // 6. Connect and Differential Upload via basic-ftp
-  const client = new ftp.Client(60000); // 60s timeout
-  client.ftp.verbose = process.env.FTP_VERBOSE === 'true';
+  // 6. Connect and Differential Upload with Retry & Incremental Cache
+  let client = null;
+  let currentRemoteDir = null;
+  let uploadedCount = 0;
 
   try {
     console.log(`📡 Step 3/3: Connecting to ${FTP_HOST}:${FTP_PORT} (User: ${FTP_USER})...`);
     console.log(`🔒 Security Mode: ${FTP_SECURE === true ? 'FTPS (Explicit TLS)' : FTP_SECURE === 'implicit' ? 'FTPS (Implicit TLS)' : 'Plain FTP'}`);
 
-    await client.access({
-      host: FTP_HOST,
-      user: FTP_USER,
-      password: FTP_PASSWORD,
-      port: FTP_PORT,
-      secure: FTP_SECURE,
-      secureOptions: {
-        rejectUnauthorized: FTP_REJECT_UNAUTHORIZED,
-      },
-    });
-
+    client = await connectFTP();
     console.log('✅ Connected securely to FTP server.\n');
     console.log(`🚀 Uploading ${uploadQueue.length} modified/new files into "${FTP_REMOTE_ROOT}"...\n`);
 
-    let currentRemoteDir = null;
-    let uploadedCount = 0;
-
-    for (let i = 0; i < uploadQueue.length; i++) {
-      const item = uploadQueue[i];
-      const remoteFilePath = path.posix.join(FTP_REMOTE_ROOT, item.relPath);
+    // Helper: Upload single file with auto-reconnect retry
+    async function uploadWithRetry(item, remoteFilePath, maxRetries = 3) {
       const remoteDir = path.posix.dirname(remoteFilePath);
       const fileName = path.posix.basename(remoteFilePath);
 
-      // Only change directory when moving to a new folder
-      if (currentRemoteDir !== remoteDir) {
-        await client.ensureDir(remoteDir);
-        currentRemoteDir = remoteDir;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          if (currentRemoteDir !== remoteDir) {
+            await client.ensureDir(remoteDir);
+            currentRemoteDir = remoteDir;
+          }
+
+          await client.uploadFrom(item.fullPath, fileName);
+          return;
+        } catch (err) {
+          const isLast = attempt === maxRetries;
+          const errMsg = err.message || err.code || 'Socket drop';
+
+          // Safely close dropped socket
+          try {
+            client.close();
+          } catch (closeErr) {}
+          currentRemoteDir = null; // Remote CWD is reset on reconnect
+
+          if (isLast) {
+            throw new Error(`Failed uploading "${item.relPath}" after ${maxRetries} attempts: ${errMsg}`);
+          }
+
+          const backoffSec = attempt * 2;
+          process.stdout.write(`\n  ⚠️ Socket drop on "${item.relPath}" (${errMsg}). Reconnecting in ${backoffSec}s (attempt ${attempt}/${maxRetries})... `);
+          await new Promise((resolve) => setTimeout(resolve, backoffSec * 1000));
+
+          client = await connectFTP();
+          process.stdout.write(`✅ Reconnected! Retrying... `);
+        }
       }
-
-      const statusTag = item.status === 'new' ? '✨ NEW' : '🔄 MODIFIED';
-      process.stdout.write(`  [${i + 1}/${uploadQueue.length}] ${statusTag}: ${item.relPath} (${formatBytes(item.size)})... `);
-
-      await client.uploadFrom(item.fullPath, fileName);
-      uploadedCount++;
-      process.stdout.write(`✅\n`);
     }
 
-    // 7. Update .deploy-cache.json upon 100% successful upload
-    const updatedCache = {
-      lastDeployed: new Date().toISOString(),
-      remoteRoot: FTP_REMOTE_ROOT,
-      totalFiles: currentFilesList.length,
-      files: currentHashMap,
-    };
+    // Process files sequentially
+    for (let i = 0; i < uploadQueue.length; i++) {
+      const item = uploadQueue[i];
+      const remoteFilePath = path.posix.join(FTP_REMOTE_ROOT, item.relPath);
+      const statusTag = item.status === 'new' ? '✨ NEW' : '🔄 MODIFIED';
 
-    fs.writeFileSync(cachePath, JSON.stringify(updatedCache, null, 2), 'utf8');
+      process.stdout.write(`  [${i + 1}/${uploadQueue.length}] ${statusTag}: ${item.relPath} (${formatBytes(item.size)})... `);
+
+      await uploadWithRetry(item, remoteFilePath, 3);
+      uploadedCount++;
+      process.stdout.write(`✅\n`);
+
+      // 1. Immediately record in-memory
+      workingCache[item.relPath] = item.hash;
+
+      // 2. Persist to disk incrementally after EVERY file
+      flushCache();
+    }
+
+    // Final cache synchronization: ensure all current build files exist in cache
+    for (const item of currentFilesList) {
+      if (!workingCache[item.relPath]) {
+        workingCache[item.relPath] = item.hash;
+      }
+    }
+    flushCache();
 
     console.log('\n======================================================');
     console.log('🎉 Deployment Successful!');
     console.log(`🌐 Target: ${FTP_HOST}${FTP_REMOTE_ROOT}`);
     console.log(`📦 Summary: Uploaded ${uploadedCount} modified/new files. ${unchangedCount} files were unchanged and skipped.`);
-    console.log(`💾 Cache: Updated local .deploy-cache.json`);
+    console.log(`💾 Cache: Fully persisted in .deploy-cache.json`);
     console.log('======================================================\n');
   } catch (err) {
-    console.error('\n❌ Deployment Failed with error:');
+    console.error('\n❌ Deployment interrupted with error:');
     console.error(err.message || err);
-    console.error('\n💡 Troubleshooting Tips:');
-    console.error(' 1. Verify FTP_HOST, FTP_USER, and FTP_PASSWORD in .env.local.');
-    console.error(' 2. If using Namecheap cPanel, ensure FTP account has access to /public_html.');
-    console.error(' 3. Try setting FTP_SECURE="false" in .env.local if explicit FTPS is not supported on your port.');
-    console.error(' 4. Cache was not updated so no changes were lost; re-run when connection is restored.\n');
+    console.error('\n💡 Progress Preserved:');
+    console.error(` • Successfully uploaded and cached ${uploadedCount} file(s) in .deploy-cache.json.`);
+    console.error(' • Re-running "npm run deploy" (or "npm run deploy -- --skip-build") will instantly skip them and resume seamlessly.\n');
     process.exit(1);
   } finally {
-    client.close();
+    if (client) {
+      try {
+        client.close();
+      } catch (e) {}
+    }
   }
 }
 

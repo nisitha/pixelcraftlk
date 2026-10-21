@@ -51,6 +51,7 @@ export interface TestimonialItem {
   company: string;
   rating: number;
   initials: string;
+  avatar?: string;
 }
 
 export interface BlogPostItem {
@@ -328,52 +329,57 @@ export const clientTestimonials: TestimonialItem[] = [
   {
     id: 'edward-hayes',
     quote:
-      'PixelCraft Studios delivered a comprehensive digital architecture that immediately aligned our entire leadership squad. The difference in our conversion metrics was palpable within 45 days, giving our board complete confidence to scale internationally.',
+      'They delivered a comprehensive digital architecture that immediately aligned our entire leadership team. The difference in our engagement metrics was noticeable within 45 days, giving our board complete confidence to scale internationally.',
     author: 'Edward Hayes',
     role: 'Chief Operating Officer (COO)',
     company: 'Nexus Data Technologies',
     rating: 5,
     initials: 'EH',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80',
   },
   {
     id: 'alistair-finch',
     quote:
-      'Our previous agency campaigns felt like throwing budget against the wall. The team at PixelCraft brought rigorous engineering discipline, sub-second latency, and data analysis that decreased our Customer Acquisition Cost by over 40%.',
+      'Our previous agency campaigns felt like throwing budget against the wall. The team at PixelCraft brought rigorous engineering discipline, sub-second latency, and data analysis that decreased our Customer Acquisition Cost by over 38%.',
     author: 'Alistair Finch',
     role: 'VP of Growth & Strategy',
     company: 'Horizon Systems',
     rating: 5,
     initials: 'AF',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80',
   },
   {
     id: 'sarah-chen',
     quote:
-      'Our industry has rigorous financial compliance hurdles, which made modernizing our web portal daunting. PixelCraft navigated these regulatory waters with remarkable finesse, building a platform that is both uncompromisingly secure and visually breathtaking.',
+      'The creative and technical execution exceeded every benchmark. PixelCraft didn’t just redesign our flagship portal—they engineered an ultra-fast design system that transformed our enterprise velocity across global markets.',
     author: 'Sarah Chen',
     role: 'VP of Digital Product',
     company: 'Veloce Capital',
     rating: 5,
     initials: 'SC',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&q=80',
   },
   {
     id: 'james-oconnell',
     quote:
-      'The creative and technical concepts they engineered for our flagship product launch were fresh, kinetic, and razor-sharp on brand. They understood our enterprise customers better than our internal teams did!',
+      'From complex API architecture to kinetic motion design, PixelCraft operates at the highest echelon of digital craft. Their sprint cadence and proactive communication made them feel like our most experienced internal squad.',
     author: "James O'Connell",
     role: 'Founder & Head of Strategy',
     company: 'Solis Labs Global',
     rating: 5,
     initials: 'JO',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80',
   },
   {
     id: 'elena-rostova',
     quote:
-      'The most valuable aspect of working with PixelCraft Studios is their proactive technical communication and genuine partnership. We never felt like just another client ticket—they operated like a dedicated in-house engineering team.',
+      'Working with PixelCraft felt like unlocking an unfair advantage. Their strategic clarity, pixel-perfect motion, and uncompromising attention to detail delivered our highest-grossing product launch in brand history.',
     author: 'Elena Rostova',
     role: 'Chief Brand Officer',
     company: 'Kinetix Interactive Media',
     rating: 5,
     initials: 'ER',
+    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80',
   },
 ];
 

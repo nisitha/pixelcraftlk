@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLeft, ArrowRight, Star, Quote } from 'lucide-react';
+import { clientTestimonials } from '@/data/homepage';
 import { cn } from '@/lib/utils';
 
 if (typeof window !== 'undefined') {
@@ -14,13 +15,7 @@ export interface TestimonialsSectionProps {
   className?: string;
 }
 
-interface TestimonialCardData {
-  id: string;
-  quote: string;
-  author: string;
-  role: string;
-  company: string;
-  initials: string;
+interface TestimonialCardTheme {
   bg: string;
   textColor: string;
   borderClass: string;
@@ -33,15 +28,9 @@ interface TestimonialCardData {
   roleTextColor: string;
 }
 
-const testimonialDeck: TestimonialCardData[] = [
+const cardThemes: TestimonialCardTheme[] = [
+  // 1. Dark Charcoal
   {
-    id: 'edward-hayes',
-    quote:
-      'They delivered a comprehensive strategy that immediately focused our entire team. The difference in our engagement metrics was noticeable within the first 60 days, giving us the confidence we needed to scale internationally.',
-    author: 'Edward Hayes',
-    role: 'Chief Operating Officer (COO)',
-    company: 'Nexus Tech',
-    initials: 'EH',
     bg: '#0a0d0e',
     textColor: 'text-white',
     borderClass: 'border-white/10',
@@ -53,14 +42,8 @@ const testimonialDeck: TestimonialCardData[] = [
     metaBorderClass: 'border-white/10',
     roleTextColor: 'text-white/70',
   },
+  // 2. Electric Lime
   {
-    id: 'alistair-finch',
-    quote:
-      'Our previous campaigns felt like throwing spaghetti at the wall. The team brought incredible discipline and data analysis to our budget. They reduced our Customer Acquisition Cost by 34% while scaling our pipeline.',
-    author: 'Alistair Finch',
-    role: 'VP of Growth & Strategy',
-    company: 'Horizon Systems',
-    initials: 'AF',
     bg: '#c8f53c',
     textColor: 'text-[#080d0d]',
     borderClass: 'border-black/5',
@@ -72,14 +55,8 @@ const testimonialDeck: TestimonialCardData[] = [
     metaBorderClass: 'border-black/10',
     roleTextColor: 'text-[#080d0d]/75',
   },
+  // 3. Deep Purple
   {
-    id: 'sarah-chen',
-    quote:
-      'The creative execution exceeded all expectations. PixelCraft didn’t just build a brand identity; they engineered an entire digital ecosystem that converted our audience into loyal advocates across multiple markets.',
-    author: 'Sarah Chen',
-    role: 'VP of Digital Product',
-    company: 'Veloce Capital',
-    initials: 'SC',
     bg: '#7966f8',
     textColor: 'text-white',
     borderClass: 'border-white/20',
@@ -91,17 +68,49 @@ const testimonialDeck: TestimonialCardData[] = [
     metaBorderClass: 'border-white/15',
     roleTextColor: 'text-white/80',
   },
+  // 4. Slate Night
+  {
+    bg: '#161b22',
+    textColor: 'text-white',
+    borderClass: 'border-white/15',
+    quoteBoxBg: 'bg-white/10',
+    quoteIconColor: 'fill-[#c8f53c] text-[#c8f53c]',
+    starColor: 'fill-amber-400 text-amber-400',
+    avatarBg: 'bg-[#ff5722]',
+    avatarTextColor: 'text-white',
+    metaBorderClass: 'border-white/10',
+    roleTextColor: 'text-white/70',
+  },
+  // 5. Deep Teal / Ocean
+  {
+    bg: '#0c2229',
+    textColor: 'text-white',
+    borderClass: 'border-white/15',
+    quoteBoxBg: 'bg-[#c8f53c]/15',
+    quoteIconColor: 'fill-[#c8f53c] text-[#c8f53c]',
+    starColor: 'fill-amber-400 text-amber-400',
+    avatarBg: 'bg-[#c8f53c]',
+    avatarTextColor: 'text-[#0c2229]',
+    metaBorderClass: 'border-white/10',
+    roleTextColor: 'text-white/75',
+  },
+];
+
+const slotConfigs = [
+  { zIndex: 50, rotation: 0, scale: 1, y: 0, opacity: 1 },
+  { zIndex: 40, rotation: -4, scale: 0.96, y: 12, opacity: 0.94 },
+  { zIndex: 30, rotation: 5, scale: 0.92, y: 22, opacity: 0.86 },
+  { zIndex: 20, rotation: -2, scale: 0.88, y: 32, opacity: 0.68 },
+  { zIndex: 10, rotation: 3, scale: 0.84, y: 40, opacity: 0.45 },
 ];
 
 /**
  * Section 9: Real People, Real Results Feedback (.section.feedback)
  * 1:1 Parity with https://scalient.webflow.io/
- * - Clean light background (#f4f4f6) for alternating contrast
- * - Geometric header with ✦ FEEDBACK badge, star ratings, and client avatars
- * - 3D Stacked Card Deck (Dark #0a0d0e, Lime #c8f53c, Purple #7966f8)
- * - Layered transforms: Front 0deg/scale 1, Second -4deg/scale 0.96, Third 6deg/scale 0.92
- * - Interactive fly-away shuffle physics + Click-to-flip on background cards
- * - GSAP ScrollTrigger pin & scrub support
+ * - Centered viewport pinning with zero cutoff on all screen heights
+ * - 5 verified high-ticket client reviews with avatars and unique theme colors
+ * - 3D stacked card deck with interactive tilt physics, fly-off transitions, and click-to-flip
+ * - Smooth ScrollTrigger pinning and bidirectional wheel scrub support
  */
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ className }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -110,20 +119,27 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
   const headerRef = useRef<HTMLDivElement>(null);
   const deckContainerRef = useRef<HTMLDivElement>(null);
 
-  const cardRef0 = useRef<HTMLDivElement>(null);
-  const cardRef1 = useRef<HTMLDivElement>(null);
-  const cardRef2 = useRef<HTMLDivElement>(null);
+  // References for all 5 cards
+  const cardRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
 
   const activeIndexRef = useRef(0);
   const isTransitioningRef = useRef(false);
   const pinTriggerRef = useRef<ScrollTrigger | null>(null);
 
+  const total = clientTestimonials.length; // 5
+
   const animateCards = useCallback((nextIndex: number, direction: 'forward' | 'backward' = 'forward') => {
     const currentIdx = activeIndexRef.current;
     if (currentIdx === nextIndex) return;
 
-    const cards = [cardRef0.current, cardRef1.current, cardRef2.current].filter(Boolean) as HTMLDivElement[];
-    if (cards.length < 3) return;
+    const cards = cardRefs.map((r) => r.current).filter(Boolean) as HTMLDivElement[];
+    if (cards.length < total) return;
 
     isTransitioningRef.current = true;
     activeIndexRef.current = nextIndex;
@@ -131,8 +147,6 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
 
     const outCard = cards[currentIdx];
     const inCard = cards[nextIndex];
-    const otherIdx = [0, 1, 2].find((i) => i !== currentIdx && i !== nextIndex)!;
-    const otherCard = cards[otherIdx];
 
     gsap.killTweensOf(cards);
 
@@ -143,34 +157,34 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
     });
 
     if (direction === 'forward') {
-      // 1. Current front card flies off to the upper-right and drops behind
+      // 1. Current front card flies off to the upper right and drops into the base slot
       tl.to(outCard, {
-        x: 340,
-        y: -60,
+        x: 320,
+        y: -50,
         rotation: 16,
         opacity: 0,
-        scale: 0.92,
-        duration: 0.38,
+        scale: 0.9,
+        duration: 0.35,
         ease: 'power2.in',
       })
         .set(outCard, {
           zIndex: 10,
           x: 0,
-          y: 28,
-          rotation: 6,
-          scale: 0.92,
+          y: slotConfigs[4].y,
+          rotation: slotConfigs[4].rotation,
+          scale: slotConfigs[4].scale,
         })
         .to(
           outCard,
           {
-            opacity: 0.82,
-            duration: 0.32,
+            opacity: slotConfigs[4].opacity,
+            duration: 0.3,
             ease: 'power2.out',
           },
-          '-=0.04'
+          '-=0.05'
         );
 
-      // 2. Incoming card snaps to front (0deg, scale 1, y 0) with spring easing
+      // 2. Incoming card snaps to front (0deg, scale 1, y 0)
       tl.to(
         inCard,
         {
@@ -178,38 +192,44 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
           y: 0,
           rotation: 0,
           scale: 1,
-          zIndex: 30,
+          zIndex: 50,
           opacity: 1,
           duration: 0.55,
           ease: 'power3.out',
         },
-        0.12
+        0.1
       );
 
-      // 3. Other card shifts into middle slot (zIndex 20, rotate -4deg)
-      tl.to(
-        otherCard,
-        {
-          x: 0,
-          y: 14,
-          rotation: -4,
-          scale: 0.96,
-          zIndex: 20,
-          opacity: 0.92,
-          duration: 0.48,
-          ease: 'power3.out',
-        },
-        0.12
-      );
+      // 3. Shift remaining cards to their respective relative slots
+      cards.forEach((card, i) => {
+        if (i !== currentIdx && i !== nextIndex) {
+          const slot = (i - nextIndex + total) % total;
+          const config = slotConfigs[slot];
+          tl.to(
+            card,
+            {
+              x: 0,
+              y: config.y,
+              rotation: config.rotation,
+              scale: config.scale,
+              zIndex: config.zIndex,
+              opacity: config.opacity,
+              duration: 0.48,
+              ease: 'power3.out',
+            },
+            0.1
+          );
+        }
+      });
     } else {
-      // Backward: incoming card zooms in from the left to front
+      // Backward: incoming card zooms in from the upper left
       tl.set(inCard, {
-        zIndex: 30,
-        x: -340,
-        y: -60,
+        zIndex: 50,
+        x: -320,
+        y: -50,
         rotation: -16,
         opacity: 0,
-        scale: 0.92,
+        scale: 0.9,
       }).to(inCard, {
         x: 0,
         y: 0,
@@ -220,39 +240,29 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
         ease: 'power3.out',
       });
 
-      // Former front card steps back into middle slot
-      tl.to(
-        outCard,
-        {
-          x: 0,
-          y: 14,
-          rotation: -4,
-          scale: 0.96,
-          zIndex: 20,
-          opacity: 0.92,
-          duration: 0.48,
-          ease: 'power3.out',
-        },
-        0.08
-      );
-
-      // Other card moves to back slot
-      tl.to(
-        otherCard,
-        {
-          x: 0,
-          y: 28,
-          rotation: 6,
-          scale: 0.92,
-          zIndex: 10,
-          opacity: 0.82,
-          duration: 0.48,
-          ease: 'power3.out',
-        },
-        0.08
-      );
+      // Shift remaining cards to their respective relative slots
+      cards.forEach((card, i) => {
+        if (i !== nextIndex) {
+          const slot = (i - nextIndex + total) % total;
+          const config = slotConfigs[slot];
+          tl.to(
+            card,
+            {
+              x: 0,
+              y: config.y,
+              rotation: config.rotation,
+              scale: config.scale,
+              zIndex: config.zIndex,
+              opacity: config.opacity,
+              duration: 0.48,
+              ease: 'power3.out',
+            },
+            0.08
+          );
+        }
+      });
     }
-  }, []);
+  }, [total]);
 
   const handleManualSelect = useCallback(
     (newIndex: number) => {
@@ -260,7 +270,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
 
       if (pinTriggerRef.current) {
         const st = pinTriggerRef.current;
-        const progressTarget = newIndex === 0 ? 0.15 : newIndex === 1 ? 0.5 : 0.85;
+        const progressTarget = (newIndex + 0.5) / total;
         const targetScroll = st.start + progressTarget * (st.end - st.start);
         window.scrollTo({
           top: targetScroll,
@@ -271,18 +281,18 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
         animateCards(newIndex, dir);
       }
     },
-    [animateCards]
+    [animateCards, total]
   );
 
   const handlePrev = useCallback(() => {
-    const prev = activeIndexRef.current > 0 ? activeIndexRef.current - 1 : 2;
+    const prev = activeIndexRef.current > 0 ? activeIndexRef.current - 1 : total - 1;
     handleManualSelect(prev);
-  }, [handleManualSelect]);
+  }, [handleManualSelect, total]);
 
   const handleNext = useCallback(() => {
-    const next = activeIndexRef.current < 2 ? activeIndexRef.current + 1 : 0;
+    const next = activeIndexRef.current < total - 1 ? activeIndexRef.current + 1 : 0;
     handleManualSelect(next);
-  }, [handleManualSelect]);
+  }, [handleManualSelect, total]);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -296,16 +306,16 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { y: 30, opacity: 0 },
+          { y: 25, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.8,
+            duration: 0.75,
             ease: 'power3.out',
             clearProps: 'transform,opacity',
             scrollTrigger: {
               trigger: headerRef.current,
-              start: 'top 85%',
+              start: 'top 88%',
               toggleActions: 'play none none none',
             },
           }
@@ -316,16 +326,16 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
       if (deckContainerRef.current) {
         gsap.fromTo(
           deckContainerRef.current,
-          { y: 40, opacity: 0 },
+          { y: 35, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.85,
+            duration: 0.8,
             ease: 'power3.out',
             clearProps: 'transform,opacity',
             scrollTrigger: {
               trigger: deckContainerRef.current,
-              start: 'top 82%',
+              start: 'top 85%',
               toggleActions: 'play none none none',
             },
           }
@@ -341,11 +351,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
           trigger: sectionRef.current,
           pin: true,
           start: 'top top',
-          end: '+=1300',
+          end: '+=2000',
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            const targetIdx = p < 0.33 ? 0 : p < 0.67 ? 1 : 2;
+            // 5 zones: 0 to 0.2, 0.2 to 0.4, 0.4 to 0.6, 0.6 to 0.8, 0.8 to 1.0
+            const targetIdx = Math.min(total - 1, Math.floor(p * total));
             if (targetIdx !== activeIndexRef.current && !isTransitioningRef.current) {
               const dir = targetIdx > activeIndexRef.current ? 'forward' : 'backward';
               animateCards(targetIdx, dir);
@@ -363,7 +374,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [animateCards]);
+  }, [animateCards, total]);
 
   return (
     <section
@@ -371,52 +382,50 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
       id="feedback"
       aria-label="Real People, Real Results Feedback"
       className={cn(
-        'section feedback relative bg-[#f4f4f6] text-[#080d0d] py-24 sm:py-32 lg:py-36 overflow-hidden',
+        'section feedback relative bg-[#f4f4f6] text-[#080d0d] min-h-screen flex flex-col justify-center py-10 sm:py-12 lg:py-14 overflow-hidden',
         className
       )}
     >
-      <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
+      <div className="max-w-[1290px] w-full mx-auto px-5 sm:px-8 relative z-10 flex flex-col justify-center">
         {/* Section Header */}
-        <div ref={headerRef} className="flex flex-col items-center text-center max-w-2xl mx-auto mb-14 sm:mb-18">
+        <div ref={headerRef} className="flex flex-col items-center text-center max-w-2xl mx-auto mb-6 sm:mb-8">
           {/* Small Pill Tag: ✦ FEEDBACK */}
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/[0.05] border border-black/10 mb-5 text-xs font-semibold uppercase tracking-wider text-[#080d0d] select-none">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/[0.05] border border-black/10 mb-3 text-xs font-semibold uppercase tracking-wider text-[#080d0d] select-none">
             <span>✦ FEEDBACK</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold tracking-tight leading-[1.06] text-[#080d0d]">
-            Real People, Real
-            <br />
-            Results Feedback
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-bold tracking-tight leading-[1.08] text-[#080d0d]">
+            Real People, Real Results Feedback
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-[#6f7781] font-normal leading-relaxed max-w-xl">
-            See what our users are truly accomplishing with honest, and project-based reviews.
+          <p className="mt-2 text-sm sm:text-base text-[#6f7781] font-normal leading-normal max-w-lg">
+            See what visionary founders and engineering leaders accomplish with honest reviews.
           </p>
 
           {/* Social Proof Subtitle Bar */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-            <div className="flex items-center -space-x-2.5">
-              <div className="w-8 h-8 rounded-full ring-2 ring-white bg-[#0a0d0e] text-[#c8f53c] font-bold text-xs flex items-center justify-center shadow-sm">
-                EH
-              </div>
-              <div className="w-8 h-8 rounded-full ring-2 ring-white bg-[#c8f53c] text-[#080d0d] font-bold text-xs flex items-center justify-center shadow-sm">
-                AF
-              </div>
-              <div className="w-8 h-8 rounded-full ring-2 ring-white bg-[#7966f8] text-white font-bold text-xs flex items-center justify-center shadow-sm">
-                SC
-              </div>
-              <div className="w-8 h-8 rounded-full ring-2 ring-white bg-[#ff5722] text-white font-bold text-xs flex items-center justify-center shadow-sm">
-                JO
-              </div>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+            <div className="flex items-center -space-x-2">
+              {clientTestimonials.slice(0, 4).map((t, idx) => (
+                <div
+                  key={t.id}
+                  className="w-7 h-7 rounded-full ring-2 ring-white font-bold text-[11px] flex items-center justify-center shadow-sm select-none"
+                  style={{
+                    backgroundColor: cardThemes[idx % cardThemes.length].bg,
+                    color: idx % cardThemes.length === 1 ? '#080d0d' : '#ffffff',
+                  }}
+                >
+                  {t.initials}
+                </div>
+              ))}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <div className="flex items-center gap-0.5 text-amber-500">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="text-sm font-semibold text-[#080d0d]">5.0 Customer Rating</span>
+              <span className="text-xs sm:text-sm font-semibold text-[#080d0d]">5.0 Customer Rating</span>
               <span className="text-xs text-[#6f7781]">• (250+ Verified Reviews)</span>
             </div>
           </div>
@@ -425,28 +434,31 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
         {/* 3D Stacked Card Deck */}
         <div
           ref={deckContainerRef}
-          className="relative w-full max-w-[760px] lg:max-w-[820px] mx-auto h-[460px] sm:h-[440px] md:h-[450px] flex items-center justify-center"
+          className="relative w-full max-w-[740px] lg:max-w-[780px] mx-auto h-[380px] sm:h-[370px] md:h-[380px] flex items-center justify-center"
         >
-          {testimonialDeck.map((card, index) => {
-            // Initial positioning before GSAP takes over or SSR fallback
+          {clientTestimonials.map((testimonial, index) => {
+            const theme = cardThemes[index % cardThemes.length];
             const isFront = index === 0;
-            const isMiddle = index === 1;
+            const slot = index; // Initial layout before animation
+            const config = slotConfigs[slot] || slotConfigs[4];
 
             const initialStyle = isFront
-              ? { zIndex: 30, transform: 'translateY(0px) rotate(0deg) scale(1)', opacity: 1 }
-              : isMiddle
-              ? { zIndex: 20, transform: 'translateY(14px) rotate(-4deg) scale(0.96)', opacity: 0.92 }
-              : { zIndex: 10, transform: 'translateY(28px) rotate(6deg) scale(0.92)', opacity: 0.82 };
+              ? { zIndex: 50, transform: 'translateY(0px) rotate(0deg) scale(1)', opacity: 1 }
+              : {
+                  zIndex: config.zIndex,
+                  transform: `translateY(${config.y}px) rotate(${config.rotation}deg) scale(${config.scale})`,
+                  opacity: config.opacity,
+                };
 
-            const ref = index === 0 ? cardRef0 : index === 1 ? cardRef1 : cardRef2;
+            const ref = cardRefs[index];
 
             return (
               <div
-                key={card.id}
+                key={testimonial.id}
                 ref={ref}
                 style={{
                   ...initialStyle,
-                  backgroundColor: card.bg,
+                  backgroundColor: theme.bg,
                 }}
                 onClick={() => {
                   if (index !== activeIndexRef.current) {
@@ -454,47 +466,57 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
                   }
                 }}
                 className={cn(
-                  'testimonial-card absolute inset-0 rounded-[32px] sm:rounded-[36px] p-8 sm:p-10 md:p-12 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.25)] flex flex-col justify-between border cursor-pointer select-none transition-shadow hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.35)]',
-                  card.textColor,
-                  card.borderClass
+                  'testimonial-card absolute inset-0 rounded-[28px] sm:rounded-[32px] p-6 sm:p-8 md:p-9 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.22)] flex flex-col justify-between border cursor-pointer select-none transition-shadow hover:shadow-[0_28px_55px_-12px_rgba(0,0,0,0.32)]',
+                  theme.textColor,
+                  theme.borderClass
                 )}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-6 sm:mb-8">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
                     <div
                       className={cn(
-                        'w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm',
-                        card.quoteBoxBg
+                        'w-10 sm:w-11 h-10 sm:h-11 rounded-2xl flex items-center justify-center shadow-sm',
+                        theme.quoteBoxBg
                       )}
                     >
-                      <Quote className={cn('w-6 h-6', card.quoteIconColor)} />
+                      <Quote className={cn('w-5 h-5', theme.quoteIconColor)} />
                     </div>
                     <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={cn('w-4 h-4', card.starColor)} />
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className={cn('w-4 h-4', theme.starColor)} />
                       ))}
                     </div>
                   </div>
 
-                  <p className="text-lg sm:text-xl md:text-[22px] lg:text-[24px] font-medium leading-relaxed sm:leading-snug tracking-tight">
-                    &ldquo;{card.quote}&rdquo;
+                  <p className="text-base sm:text-lg md:text-[19px] lg:text-[20px] font-medium leading-relaxed sm:leading-snug tracking-tight">
+                    &ldquo;{testimonial.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className={cn('flex items-center gap-4 pt-6 sm:pt-8 border-t', card.metaBorderClass)}>
-                  <div
-                    className={cn(
-                      'w-12 sm:w-14 h-12 sm:h-14 rounded-full font-bold text-base sm:text-lg flex items-center justify-center shadow shrink-0 select-none',
-                      card.avatarBg,
-                      card.avatarTextColor
-                    )}
-                  >
-                    {card.initials}
-                  </div>
+                <div className={cn('flex items-center gap-3.5 pt-5 sm:pt-6 border-t', theme.metaBorderClass)}>
+                  {testimonial.avatar ? (
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.author}
+                      className="w-11 sm:w-12 h-11 sm:h-12 rounded-full object-cover ring-2 ring-white/20 shrink-0 select-none shadow"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      className={cn(
+                        'w-11 sm:w-12 h-11 sm:h-12 rounded-full font-bold text-sm sm:text-base flex items-center justify-center shadow shrink-0 select-none',
+                        theme.avatarBg,
+                        theme.avatarTextColor
+                      )}
+                    >
+                      {testimonial.initials}
+                    </div>
+                  )}
+
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold tracking-tight">{card.author}</h3>
-                    <p className={cn('text-xs sm:text-sm font-normal', card.roleTextColor)}>
-                      {card.role} — {card.company}
+                    <h3 className="text-sm sm:text-base font-bold tracking-tight">{testimonial.author}</h3>
+                    <p className={cn('text-xs sm:text-sm font-normal', theme.roleTextColor)}>
+                      {testimonial.role} — {testimonial.company}
                     </p>
                   </div>
                 </div>
@@ -504,19 +526,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
         </div>
 
         {/* Minimal Navigation Controls */}
-        <div className="flex items-center justify-center gap-4 mt-12 sm:mt-16">
+        <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
           <button
             type="button"
             onClick={handlePrev}
             aria-label="Previous testimonial"
-            className="w-12 h-12 rounded-full bg-white hover:bg-[#080d0d] hover:text-white text-[#080d0d] border border-black/10 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 cursor-pointer group"
+            className="w-11 h-11 rounded-full bg-white hover:bg-[#080d0d] hover:text-white text-[#080d0d] border border-black/10 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 cursor-pointer group"
           >
-            <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-0.5" />
+            <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
           </button>
 
-          {/* Indicator Pills */}
+          {/* Indicator Pills for all 5 Testimonials */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/[0.04] border border-black/5">
-            {[0, 1, 2].map((i) => (
+            {clientTestimonials.map((_, i) => (
               <button
                 key={i}
                 type="button"
@@ -534,9 +556,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
             type="button"
             onClick={handleNext}
             aria-label="Next testimonial"
-            className="w-12 h-12 rounded-full bg-white hover:bg-[#080d0d] hover:text-white text-[#080d0d] border border-black/10 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 cursor-pointer group"
+            className="w-11 h-11 rounded-full bg-white hover:bg-[#080d0d] hover:text-white text-[#080d0d] border border-black/10 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 cursor-pointer group"
           >
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </button>
         </div>
       </div>

@@ -3,10 +3,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { successMetrics, strategicPills } from '@/data/homepage';
-import { Button } from '@/components/ui/Button';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
-import { TrendingUp } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 if (typeof window !== 'undefined') {
@@ -17,15 +15,102 @@ export interface SuccessMetricsSectionProps {
   className?: string;
 }
 
+interface FallingPill {
+  id: string;
+  text: string;
+  bg: string;
+  textColor: string;
+  borderClass: string;
+  rotation: number;
+  zIndex: number;
+  desktopClass: string;
+}
+
+const fallingPills: FallingPill[] = [
+  {
+    id: 'strategic-agency',
+    text: 'Strategic Agency',
+    bg: '#ffffff',
+    textColor: '#080d0d',
+    borderClass: 'border-black/5',
+    rotation: -12,
+    zIndex: 10,
+    desktopClass: 'lg:left-[2%] lg:top-[38%]',
+  },
+  {
+    id: 'results-driven',
+    text: 'Results- driven',
+    bg: '#c8f53c',
+    textColor: '#080d0d',
+    borderClass: 'border-black/5',
+    rotation: -24,
+    zIndex: 20,
+    desktopClass: 'lg:left-[17%] lg:top-[22%]',
+  },
+  {
+    id: 'influential',
+    text: 'Influential',
+    bg: '#ff5722',
+    textColor: '#ffffff',
+    borderClass: 'border-transparent',
+    rotation: -8,
+    zIndex: 12,
+    desktopClass: 'lg:left-[32%] lg:top-[8%]',
+  },
+  {
+    id: 'innovation-driven',
+    text: 'Innovation Driven',
+    bg: '#ffffff',
+    textColor: '#080d0d',
+    borderClass: 'border-black/5',
+    rotation: 4,
+    zIndex: 16,
+    desktopClass: 'lg:left-[30%] lg:top-[48%]',
+  },
+  {
+    id: 'multidimensional',
+    text: 'Multidimensional',
+    bg: 'rgba(255, 255, 255, 0.12)',
+    textColor: '#ffffff',
+    borderClass: 'border-white/20 backdrop-blur-md',
+    rotation: -32,
+    zIndex: 22,
+    desktopClass: 'lg:left-[43%] lg:top-[20%]',
+  },
+  {
+    id: 'strategic-minded',
+    text: 'Strategic - minded',
+    bg: '#cbe836',
+    textColor: '#080d0d',
+    borderClass: 'border-black/5',
+    rotation: -10,
+    zIndex: 30,
+    desktopClass: 'lg:left-[55%] lg:top-[52%]',
+  },
+  {
+    id: 'result-oriented',
+    text: 'Result oriented',
+    bg: '#7966f8',
+    textColor: '#ffffff',
+    borderClass: 'border-transparent',
+    rotation: -8,
+    zIndex: 24,
+    desktopClass: 'lg:left-[67%] lg:top-[22%]',
+  },
+];
+
 /**
- * Section 8: Metrics & Success Numbers (.section.number)
- * H2 "The Numbers Behind Success" + scroll-triggered numeric counters + strategic trait pills
+ * Section 8: The Numbers Behind Success
+ * 1:1 Parity with https://scalient.webflow.io/
+ * - Bold geometric section title with top-right description & lime CTA button
+ * - 3 Bento Stat Cards (Lime 500K Users, White 98%, Dark Charcoal 23K) with animated counters
+ * - 7 Falling colorful pill badges with staggered gravity drop physics and resting rotations
  */
 export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ className }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const metricsGridRef = useRef<HTMLDivElement>(null);
-  const pillsRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const pillsContainerRef = useRef<HTMLDivElement>(null);
 
   const [hasAnimated, setHasAnimated] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -36,13 +121,14 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setHasAnimated(true);
       return;
     }
 
     const ctx = gsap.context(() => {
-      // 1. ScrollTrigger to activate smooth number counters
+      // 1. Activate number counters
       ScrollTrigger.create({
-        trigger: sectionRef.current,
+        trigger: cardsRef.current || sectionRef.current,
         start: 'top 75%',
         once: true,
         onEnter: () => setHasAnimated(true),
@@ -68,9 +154,9 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
         );
       }
 
-      // 3. Staggered Metric Cards entrance
-      if (metricsGridRef.current) {
-        const cards = metricsGridRef.current.querySelectorAll('.metric-card-item');
+      // 3. Staggered Bento Cards entrance
+      if (cardsRef.current) {
+        const cards = cardsRef.current.querySelectorAll('.metric-bento-card');
         gsap.fromTo(
           cards,
           { y: 40, opacity: 0 },
@@ -78,11 +164,11 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
             y: 0,
             opacity: 1,
             duration: 0.85,
-            stagger: 0.12,
+            stagger: 0.15,
             ease: 'power3.out',
             clearProps: 'transform,opacity',
             scrollTrigger: {
-              trigger: metricsGridRef.current,
+              trigger: cardsRef.current,
               start: 'top 80%',
               toggleActions: 'play none none none',
             },
@@ -90,26 +176,36 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
         );
       }
 
-      // 4. Staggered Strategic Badges entrance
-      if (pillsRef.current) {
-        const pills = pillsRef.current.children;
-        gsap.fromTo(
-          pills,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.04,
-            ease: 'power3.out',
-            clearProps: 'transform,opacity',
-            scrollTrigger: {
-              trigger: pillsRef.current,
-              start: 'top 90%',
-              toggleActions: 'play none none none',
+      // 4. Staggered Gravity Drop Animation for the 7 Falling Badges
+      if (pillsContainerRef.current) {
+        const labels = pillsContainerRef.current.querySelectorAll<HTMLElement>('.falling-label-pill');
+        if (labels && labels.length > 0) {
+          gsap.fromTo(
+            labels,
+            {
+              y: -160,
+              opacity: 0,
+              rotation: (index: number) => {
+                const resting = fallingPills[index]?.rotation ?? 0;
+                return resting - 15;
+              },
             },
-          }
-        );
+            {
+              y: 0,
+              opacity: 1,
+              rotation: (index: number) => fallingPills[index]?.rotation ?? 0,
+              duration: 0.9,
+              stagger: 0.12,
+              ease: 'back.out(1.8)',
+              clearProps: 'opacity',
+              scrollTrigger: {
+                trigger: pillsContainerRef.current,
+                start: 'top 75%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
+        }
       }
     }, sectionRef);
 
@@ -122,84 +218,135 @@ export const SuccessMetricsSection: React.FC<SuccessMetricsSectionProps> = ({ cl
       id="metrics"
       aria-label="The Numbers Behind Success"
       className={cn(
-        'section number relative bg-[#090e0e] text-white py-24 sm:py-32 lg:py-36 overflow-hidden border-t border-white/5',
+        'section number relative bg-[#080d0d] text-white py-24 sm:py-32 lg:py-36 overflow-hidden border-t border-white/5',
         className
       )}
     >
       <div className="max-w-[1290px] mx-auto px-5 sm:px-8 relative z-10">
         {/* Section Header */}
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 sm:mb-20">
+        <div
+          ref={headerRef}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14 sm:mb-20"
+        >
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--primary-color)] select-none">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>Proven Performance</span>
-            </div>
-
-            <h2 className="text-[36px] sm:text-[48px] md:text-[56px] font-semibold tracking-[-0.035em] leading-[1.08] text-white">
-              The Numbers Behind{' '}
-              <span className="font-script font-normal text-[var(--primary-color)] text-[46px] sm:text-[62px] md:text-[72px] italic">
-                success
-              </span>
+            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-bold tracking-[-0.035em] leading-[1.0] text-white">
+              The Numbers
+              <br />
+              Behind Success
             </h2>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <p className="text-base sm:text-lg text-[#899698] font-normal leading-relaxed max-w-[420px]">
-              Strategy, creativity, and engineering—the engine powering every bold digital idea.
+          <div className="flex flex-col sm:flex-row sm:items-center gap-6 md:gap-8">
+            <p className="text-base sm:text-lg text-white/70 max-w-[340px] leading-relaxed font-normal">
+              Strategy, creativity, and growth - the engine for every bold idea.
             </p>
-            <Button variant="primary" size="default" href="/contact">
-              Get Started
-            </Button>
-          </div>
-        </div>
-
-        {/* 4 Animated Metric Cards Grid */}
-        <div ref={metricsGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-16">
-          {successMetrics.map((metric, index) => (
-            <div
-              key={metric.label}
-              className="metric-card-item rounded-3xl bg-[#111616] border border-white/10 p-7 sm:p-8 flex flex-col justify-between shadow-xl hover:border-white/20 transition-all duration-300 group"
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-[#c8f53c] hover:bg-[#b8e52c] text-[#080d0d] font-semibold text-sm sm:text-base transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,245,60,0.4)] group shrink-0"
             >
-              <div>
-                <span className="text-xs font-mono uppercase tracking-widest text-[#6f7781] block mb-4">
-                  METRIC // 0{index + 1}
-                </span>
-
-                <div className="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-2 group-hover:text-[var(--primary-color)] transition-colors">
-                  <AnimatedCounter
-                    numericTarget={metric.numericTarget ?? 0}
-                    suffix={metric.suffix ?? ''}
-                    decimals={metric.decimals ?? 0}
-                    fallbackValue={metric.value}
-                    shouldStart={hasAnimated}
-                  />
-                </div>
-
-                <h3 className="text-lg font-semibold text-white tracking-tight mb-2">
-                  {metric.label}
-                </h3>
-              </div>
-
-              <p className="text-xs sm:text-sm text-[#899698] font-normal leading-relaxed mt-4 pt-4 border-t border-white/5">
-                {metric.description}
-              </p>
-            </div>
-          ))}
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          </div>
         </div>
 
-        {/* Strategic Trait Badges Row */}
-        <div className="pt-8 border-t border-white/5">
-          <div className="text-xs font-mono uppercase tracking-widest text-[#6f7781] text-center mb-6">
-            CORE AGENCY CAPABILITIES
+        {/* 3 Bento Stat Cards */}
+        <div
+          ref={cardsRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 lg:gap-8 mb-16 sm:mb-24"
+        >
+          {/* Card 1: Lime Accent (#c8f53c) */}
+          <div className="metric-bento-card rounded-[32px] sm:rounded-[36px] bg-[#c8f53c] p-8 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[360px] sm:min-h-[400px] lg:min-h-[440px] shadow-2xl transition-transform duration-300 hover:-translate-y-1.5">
+            <div className="flex items-start whitespace-nowrap">
+              <span className="text-[64px] sm:text-[76px] lg:text-[84px] xl:text-[96px] font-bold tracking-[-0.04em] leading-none text-[#080d0d]">
+                <AnimatedCounter
+                  numericTarget={500}
+                  suffix="K"
+                  fallbackValue="500K"
+                  shouldStart={hasAnimated}
+                  duration={1800}
+                />
+              </span>
+              <span className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight text-[#080d0d] ml-1.5 sm:ml-2 mt-1 sm:mt-1.5 whitespace-nowrap">
+                Users
+              </span>
+            </div>
+            <p className="text-sm sm:text-base md:text-[17px] font-normal leading-relaxed text-[#080d0d]/85 pt-8 mt-auto">
+              We offer flexible, custom-fit plans designed to meet the unique needs and budget of your team
+            </p>
           </div>
 
-          <div ref={pillsRef} className="flex flex-wrap items-center justify-center gap-3 max-w-4xl mx-auto">
-            {strategicPills.map((pill) => (
+          {/* Card 2: Pure White (#ffffff) */}
+          <div className="metric-bento-card rounded-[32px] sm:rounded-[36px] bg-white p-8 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[360px] sm:min-h-[400px] lg:min-h-[440px] shadow-2xl transition-transform duration-300 hover:-translate-y-1.5">
+            <div className="flex items-start whitespace-nowrap">
+              <span className="text-[64px] sm:text-[76px] lg:text-[84px] xl:text-[96px] font-bold tracking-[-0.04em] leading-none text-[#080d0d]">
+                <AnimatedCounter
+                  numericTarget={98}
+                  suffix=""
+                  fallbackValue="98"
+                  shouldStart={hasAnimated}
+                  duration={1800}
+                />
+              </span>
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-[#080d0d] ml-1 mt-1 sm:mt-1.5 whitespace-nowrap">
+                %
+              </span>
+            </div>
+            <p className="text-sm sm:text-base md:text-[17px] font-normal leading-relaxed text-[#555e61] pt-8 mt-auto">
+              Our commitment to quality shines through near 98.05%
+            </p>
+          </div>
+
+          {/* Card 3: Dark Charcoal/Black (#101316) */}
+          <div className="metric-bento-card rounded-[32px] sm:rounded-[36px] bg-[#101316] border border-white/10 p-8 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[360px] sm:min-h-[400px] lg:min-h-[440px] shadow-2xl transition-transform duration-300 hover:-translate-y-1.5">
+            <div className="flex items-start whitespace-nowrap">
+              <span className="text-[64px] sm:text-[76px] lg:text-[84px] xl:text-[96px] font-bold tracking-[-0.04em] leading-none text-white">
+                <AnimatedCounter
+                  numericTarget={23}
+                  suffix=""
+                  fallbackValue="23"
+                  shouldStart={hasAnimated}
+                  duration={1800}
+                />
+              </span>
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-white ml-1 mt-1 sm:mt-1.5 whitespace-nowrap">
+                K
+              </span>
+            </div>
+            <p className="text-sm sm:text-base md:text-[17px] font-normal leading-relaxed text-[#899698] pt-8 mt-auto">
+              Organic growth brings in twe nty-three thousand signup
+            </p>
+          </div>
+        </div>
+
+        {/* Falling / Dropping Colorful Labels Cluster */}
+        <div className="relative mt-8 sm:mt-12 lg:mt-16">
+          {/* Subtle ambient diffuse glow */}
+          <div className="absolute inset-0 -z-10 pointer-events-none flex items-center justify-center">
+            <div className="w-[600px] sm:w-[800px] h-[250px] bg-[radial-gradient(ellipse_at_center,rgba(200,245,60,0.08)_0%,transparent_70%)] blur-3xl" />
+          </div>
+
+          <div
+            ref={pillsContainerRef}
+            className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:block relative min-h-[180px] lg:min-h-[260px] w-full max-w-[1240px] mx-auto"
+          >
+            {fallingPills.map((pill) => (
               <div
-                key={pill}
-                className="px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 hover:border-[var(--primary-color)]/30 hover:bg-white/[0.07] text-xs sm:text-sm font-medium text-white/90 transition-all duration-300 select-none cursor-default"
+                key={pill.id}
+                data-rotation={pill.rotation}
+                style={{
+                  backgroundColor: pill.bg,
+                  color: pill.textColor,
+                  zIndex: pill.zIndex,
+                  transform: `rotate(${pill.rotation}deg)`,
+                }}
+                className={cn(
+                  'falling-label-pill relative lg:absolute px-7 sm:px-9 lg:px-10 py-3.5 sm:py-4 lg:py-4.5 rounded-full font-semibold text-base sm:text-lg lg:text-[19px] whitespace-nowrap shadow-xl border cursor-default select-none transition-transform duration-300 hover:scale-105 hover:shadow-2xl',
+                  pill.borderClass,
+                  pill.desktopClass
+                )}
               >
-                {pill}
+                {pill.text}
               </div>
             ))}
           </div>

@@ -236,6 +236,19 @@ body {
   will-change: clip-path, transform, opacity;
 }
 
+/* Falling Metric Labels Helper */
+.falling-label-pill {
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+/* 3D Stacked Testimonial Deck Cards */
+.testimonial-card {
+  will-change: transform, opacity;
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
 /* Infinite Marquee Animation */
 @keyframes marquee {
   0% {

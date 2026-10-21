@@ -49,19 +49,19 @@ export const HeroBackground: React.FC = () => {
 
       {/* Signature Bottom-Center Ambient Lime Glow */}
       <div
-        className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[1300px] h-[550px] rounded-full blur-[130px] pointer-events-none"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] rounded-full blur-[140px] pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at bottom, rgba(200, 245, 60, 0.18) 0%, rgba(200, 245, 60, 0.08) 45%, transparent 70%)',
+            'radial-gradient(ellipse at bottom center, rgba(200, 245, 60, 0.22) 0%, rgba(200, 245, 60, 0.10) 45%, transparent 70%)',
         }}
       />
 
       {/* Bottom-Left Ambient Lime Glow */}
       <div
-        className="absolute -bottom-16 left-[2%] w-[650px] h-[450px] rounded-full blur-[130px] pointer-events-none"
+        className="absolute bottom-0 left-[5%] w-[750px] h-[500px] rounded-full blur-[140px] pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at bottom left, rgba(200, 245, 60, 0.18) 0%, rgba(200, 245, 60, 0.05) 50%, transparent 70%)',
+            'radial-gradient(ellipse at bottom left, rgba(200, 245, 60, 0.20) 0%, rgba(200, 245, 60, 0.06) 50%, transparent 70%)',
         }}
       />
 

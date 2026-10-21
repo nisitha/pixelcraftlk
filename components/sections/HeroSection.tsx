@@ -113,7 +113,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
         ref={heroRef}
         aria-label="Introduction &amp; Overview"
         className={cn(
-          'section hero relative min-h-[850px] lg:h-screen lg:max-h-[920px] bg-[var(--dark-color)] text-white overflow-hidden flex flex-col justify-between pt-24 sm:pt-28 lg:pt-[112px] pb-6 sm:pb-8',
+          'section hero relative min-h-screen bg-[var(--dark-color)] text-white overflow-hidden flex flex-col justify-between pt-24 sm:pt-28 lg:pt-32 pb-20 sm:pb-24 lg:pb-28',
           className
         )}
       >
